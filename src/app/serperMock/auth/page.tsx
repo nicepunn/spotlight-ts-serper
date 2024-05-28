@@ -1,9 +1,3 @@
-function Home() {
+export default function Page() {
   return <>some stuffs</>
 }
-
-Home.getInitialProps = async (ctx) => {
-  return {}
-}
-
-export default Home
