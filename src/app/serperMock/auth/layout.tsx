@@ -91,7 +91,7 @@ export default function AuthLayout({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-zinc-100/80 dark:bg-zinc-900" />
+            <div className="fixed inset-0 bg-zinc-100/80 dark:bg-zinc-900/80" />
           </TransitionChild>
 
           <div className="fixed inset-0 flex">
@@ -142,7 +142,10 @@ export default function AuthLayout({
                     </div>
                   </div>
                   <nav className="flex flex-1 flex-col">
-                    <ul role="list" className="flex flex-1 flex-col gap-y-7">
+                    <ul
+                      role="list"
+                      className="flex flex-1 flex-col gap-y-7 pt-1"
+                    >
                       <li>
                         <ul role="list" className="-mx-2 space-y-1">
                           {navigation.map((item: NavItem) => (
@@ -167,7 +170,7 @@ export default function AuthLayout({
                         </ul>
                       </li>
                       <li className="mt-auto">
-                        <hr className="my-2 dark:border-zinc-800" />
+                        <hr className="my-4 dark:border-zinc-800" />
                         <button className="w-full">
                           <a
                             href="settings"
@@ -202,7 +205,7 @@ export default function AuthLayout({
                             Support
                           </a>
                         </button>
-                        <hr className="my-2 dark:border-zinc-800" />
+                        <hr className="my-4 dark:border-zinc-800" />
                         <Menu as="div" className="w-full">
                           <MenuButton className="mt-auto w-full">
                             <a
@@ -330,7 +333,7 @@ export default function AuthLayout({
             </div>
           </div>
           <nav className="flex flex-1 flex-col">
-            <ul role="list" className="flex flex-1 flex-col gap-y-7">
+            <ul role="list" className="flex flex-1 flex-col gap-y-7 pt-1">
               <li>
                 <ul role="list" className="-mx-2 space-y-1">
                   {navigation.map((item: NavItem) => (
@@ -355,7 +358,7 @@ export default function AuthLayout({
                 </ul>
               </li>
               <li className="mt-auto flex flex-col gap-y-1">
-                <hr className="my-2 dark:border-zinc-800" />
+                <hr className="my-2.5 dark:border-zinc-800" />
                 <button className="w-full">
                   <a
                     href="settings"
@@ -390,8 +393,7 @@ export default function AuthLayout({
                     Support
                   </a>
                 </button>
-                <hr className="my-2 dark:border-zinc-800" />
-                {/* -------------------------------------------------------------------------------------------------------------------------------------------------------- */}
+                <hr className="my-2.5 dark:border-zinc-800" />
                 <Menu as="div" className="w-full">
                   <MenuButton className="mt-auto w-full">
                     <a
@@ -482,7 +484,6 @@ export default function AuthLayout({
                     </MenuItems>
                   </Transition>
                 </Menu>
-                {/* ------------------------------------------------------------------------------------------------------------------------------------------------- */}
               </li>
             </ul>
           </nav>
@@ -490,7 +491,7 @@ export default function AuthLayout({
       </div>
 
       <div className="w-full lg:pl-[262px]">
-        <div className="sticky top-0 z-40 flex h-16 shrink-0 flex-row-reverse items-center gap-x-4 border-b px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:hidden lg:px-8 dark:border-zinc-600 dark:bg-zinc-800">
+        <div className="sticky top-0 z-40 flex h-[72px] shrink-0 flex-row-reverse items-center gap-x-4 border-b px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:hidden lg:px-8 dark:border-zinc-600 dark:bg-zinc-800">
           <button
             type="button"
             className="-m-2.5 p-2.5 lg:hidden dark:text-zinc-600"
@@ -513,56 +514,6 @@ export default function AuthLayout({
                 className="hidden bg-zinc-100 bg-zinc-100/10 lg:block lg:h-6 lg:w-px lg:dark:bg-zinc-900"
                 aria-hidden="true"
               />
-
-              {/* Profile dropdown */}
-              {/* <Menu as="div" className="relative">
-                <MenuButton className="-m-1.5 flex items-center p-1.5">
-                  <span className="sr-only">Open user menu</span>
-                  <img
-                    className="h-8 w-8 rounded-full dark:bg-zinc-50"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                  />
-                  <span className="hidden lg:flex lg:items-center">
-                    <span
-                      className="ml-4 text-sm font-semibold leading-6 dark:text-zinc-900"
-                      aria-hidden="true"
-                    >
-                      Tom Cook
-                    </span>
-                    <ChevronDownIcon
-                      className="ml-2 h-5 w-5 dark:text-zinc-400"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </MenuButton>
-                <Transition
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <MenuItems className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md dark:bg-zinc-100 py-2 shadow-lg ring-1 ring-zinc-900/5 focus:outline-none">
-                    {userNavigation.map((item) => (
-                      <MenuItem key={item.name}>
-                        {({ focus }) => (
-                          <a
-                            href={item.href}
-                            className={classNames(
-                              focus ? 'dark:bg-zinc-50' : '',
-                              'block px-3 py-1 text-sm leading-6 dark:text-zinc-900',
-                            )}
-                          >
-                            {item.name}
-                          </a>
-                        )}
-                      </MenuItem>
-                    ))}
-                  </MenuItems>
-                </Transition>
-              </Menu> */}
               <div className="flex h-10 w-full">
                 <svg viewBox="0 0 214 75" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -587,8 +538,8 @@ export default function AuthLayout({
           </div>
         </div>
 
-        <main className="py-10">
-          <div className="px-4 sm:px-6 lg:px-8">{children}</div>
+        <main className="py-8">
+          <div className="px-4 sm:px-8">{children}</div>
         </main>
       </div>
     </div>
