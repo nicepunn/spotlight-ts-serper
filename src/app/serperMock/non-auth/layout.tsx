@@ -1,9 +1,7 @@
 import { type Metadata } from 'next'
 
-import { Providers } from '@/app/providers'
-import { Layout } from '@/components/Layout'
-
 import '@/styles/tailwind.css'
+import { Layout } from './_components/Layout'
 
 export const metadata: Metadata = {
   title: {
@@ -20,24 +18,10 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default function NonAuthLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <html
-      lang="en"
-      className="dark h-full antialiased"
-      suppressHydrationWarning
-    >
-      <body className="flex h-full bg-zinc-50 dark:bg-black">
-        <Providers>
-          <div className="flex w-full">
-            {children}
-          </div>
-        </Providers>
-      </body>
-    </html>
-  )
+  return <Layout>{children}</Layout>
 }
