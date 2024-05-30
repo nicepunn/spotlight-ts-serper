@@ -193,7 +193,7 @@ function MyTable() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-800">
+                <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
                   {people.map((person) => (
                     <tr key={person.Id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0 dark:text-zinc-100">

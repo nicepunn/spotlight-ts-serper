@@ -539,7 +539,7 @@ export default function AuthLayout({
         </div>
 
         <main className="py-8">
-          <div className="px-4 sm:px-8">{children}</div>
+          <div className="px-4 md:px-8">{children}</div>
         </main>
       </div>
     </div>
