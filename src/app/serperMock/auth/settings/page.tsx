@@ -1,4 +1,8 @@
+'use client'
+
 import { Button } from '@/components/Button'
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/20/solid'
+import { useState } from 'react'
 
 export default function Settings() {
   return (
@@ -89,6 +93,8 @@ function UserInfoCard() {
 }
 
 function ChangePasswordCard() {
+  const [isCurrentPasswordShow, setCurrentPasswordShow] = useState(false)
+  const [isNewPasswordShow, setNewPasswordShow] = useState(false)
   return (
     <div className="h-[330px] w-full rounded-lg bg-zinc-100 p-8 shadow md:max-w-[448px] dark:bg-zinc-900">
       <form className="flex h-full w-full flex-col justify-between">
@@ -101,14 +107,27 @@ function ChangePasswordCard() {
             Current password
           </label>
           <div className="mt-1">
-            <input
-              id="current-password"
-              name="current-password"
-              type="password"
-              autoComplete="current-password"
-              required
-              className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-white px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
-            />
+            <div className="relative h-fit w-full">
+              <input
+                id="current-password"
+                name="current-password"
+                type={isCurrentPasswordShow ? 'text' : 'password'}
+                autoComplete="current-password"
+                required
+                className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-white py-[calc(theme(spacing.2)-1px)] pl-3 pr-10 shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
+              />
+              {isCurrentPasswordShow ? (
+                <EyeSlashIcon
+                  onClick={() => setCurrentPasswordShow(!isCurrentPasswordShow)}
+                  className="absolute right-[11px] top-[11px] h-5 w-5 items-center justify-center hover:cursor-pointer"
+                />
+              ) : (
+                <EyeIcon
+                  onClick={() => setCurrentPasswordShow(!isCurrentPasswordShow)}
+                  className="absolute right-[11px] top-[11px] h-5 w-5 items-center justify-center hover:cursor-pointer"
+                />
+              )}
+            </div>
           </div>
         </div>
         <div>
@@ -119,14 +138,27 @@ function ChangePasswordCard() {
             New password
           </label>
           <div className="mt-1">
-            <input
-              id="new-password"
-              name="new-password"
-              type="password"
-              autoComplete="new-password"
-              required
-              className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-white px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
-            />
+            <div className="relative h-fit w-full">
+              <input
+                id="new-password"
+                name="new-password"
+                type={isNewPasswordShow ? 'text' : 'password'}
+                autoComplete="new-password"
+                required
+                className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-white py-[calc(theme(spacing.2)-1px)] pl-3 pr-10 shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
+              />
+              {isNewPasswordShow ? (
+                <EyeSlashIcon
+                  onClick={() => setNewPasswordShow(!isNewPasswordShow)}
+                  className="absolute right-[11px] top-[11px] h-5 w-5 items-center justify-center hover:cursor-pointer"
+                />
+              ) : (
+                <EyeIcon
+                  onClick={() => setNewPasswordShow(!isNewPasswordShow)}
+                  className="absolute right-[11px] top-[11px] h-5 w-5 items-center justify-center hover:cursor-pointer"
+                />
+              )}
+            </div>
           </div>
         </div>
         <div className="pt-1">

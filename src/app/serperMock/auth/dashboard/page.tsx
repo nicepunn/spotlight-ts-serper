@@ -50,7 +50,60 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="h-[450px] w-full rounded-lg bg-zinc-100 dark:bg-zinc-900"></div>
+      <MyGraph />
+    </div>
+  )
+}
+
+function MyGraph() {
+  return (
+    <div className="flex h-[450px] w-full flex-col overflow-hidden rounded-lg bg-zinc-100 px-4 dark:bg-zinc-900">
+      <form
+        action="#"
+        method="POST"
+        className="flex h-[60px] w-full flex-row items-center justify-between"
+      >
+        <div className="flex flex-row gap-x-2">
+          <select
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-md border-r-[12px] border-solid border-transparent bg-zinc-50 py-2 pl-3 pr-1 text-base font-normal text-zinc-900 outline-offset-2 transition hover:bg-zinc-100 active:bg-zinc-100 active:text-zinc-900/60 active:transition-none disabled:text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:active:bg-zinc-800/50 dark:active:text-zinc-50/70 disabled:dark:text-zinc-400"
+            id="graph-mode"
+            name="graph-mode"
+          >
+            <option
+              className=" line-clamp-1 text-base font-normal dark:bg-zinc-800 dark:text-zinc-100"
+              value="requests"
+            >
+              Requests
+            </option>
+            <option
+              className=" line-clamp-1 text-base font-normal dark:bg-zinc-800 dark:text-zinc-100"
+              value="credits"
+            >
+              Credits
+            </option>
+          </select>
+          <select
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-md border-r-[12px] border-solid border-transparent bg-zinc-50 py-2 pl-3 pr-1 text-base font-normal text-zinc-900 outline-offset-2 transition hover:bg-zinc-100 active:bg-zinc-100 active:text-zinc-900/60 active:transition-none disabled:text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:active:bg-zinc-800/50 dark:active:text-zinc-50/70 disabled:dark:text-zinc-400"
+            id="date-picker"
+            name="date-picker"
+          >
+            <option
+              className=" line-clamp-1 text-base font-normal dark:bg-zinc-800 dark:text-zinc-100"
+              value="datePicker"
+            >
+              05/16/2024 - 05/30/2024
+            </option>
+          </select>
+        </div>
+        <div className="flex flex-col items-end gap-y-1">
+          <div className="text-sm font-normal leading-4 text-zinc-800 dark:text-zinc-200">
+            Total
+          </div>
+          <div className="text-base font-bold leading-4 text-zinc-800 dark:text-zinc-200">
+            243
+          </div>
+        </div>
+      </form>
     </div>
   )
 }

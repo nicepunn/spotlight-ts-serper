@@ -1,13 +1,15 @@
 'use client'
 
 import { Button } from '@/components/Button'
-import { Dispatch, SetStateAction } from 'react'
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/20/solid'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 interface SignInProps {
   setPage: Dispatch<SetStateAction<'Sign In' | 'Sign Up'>>
 }
 
 export default function SignInCard(props: SignInProps) {
+  const [isKeyVisible, setKeyVisible] = useState(false)
   const { setPage } = props
   return (
     <div className="flex w-full flex-col items-center gap-y-6">
@@ -78,14 +80,27 @@ export default function SignInCard(props: SignInProps) {
                 Password
               </label>
               <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-white px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
-                />
+                <div className="relative h-fit w-full">
+                  <input
+                    id="password"
+                    name="password"
+                    type={isKeyVisible ? 'text' : 'password'}
+                    autoComplete="current-password"
+                    required
+                    className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-white py-[calc(theme(spacing.2)-1px)] pl-3 pr-11 shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
+                  />
+                  {isKeyVisible ? (
+                    <EyeSlashIcon
+                      onClick={() => setKeyVisible(!isKeyVisible)}
+                      className="absolute right-[11px] top-[11px] h-5 w-5 items-center justify-center hover:cursor-pointer"
+                    />
+                  ) : (
+                    <EyeIcon
+                      onClick={() => setKeyVisible(!isKeyVisible)}
+                      className="absolute right-[11px] top-[11px] h-5 w-5 items-center justify-center hover:cursor-pointer"
+                    />
+                  )}
+                </div>
               </div>
             </div>
 
