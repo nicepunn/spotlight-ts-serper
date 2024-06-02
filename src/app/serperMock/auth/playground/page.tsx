@@ -475,7 +475,7 @@ function OutputCard(props: { filterProp: FilterProps }) {
   return (
     <nav className="mt-1 flex w-full flex-col overflow-auto bg-inherit">
       <div className="relative flex h-10 justify-between">
-        <div className="flex w-full flex-row justify-between border-b-[1.5px] border-zinc-500">
+        <div className="flex w-full flex-row justify-between border-b-[1.5px] dark:border-zinc-500">
           {/* Current: "border-indigo-500 text-zinc-100", Default: "border-transparent text-zinc-500 hover:border-zinc-700 hover:text-zinc-300" */}
           <div className="flex flex-row">
             <button
@@ -483,8 +483,8 @@ function OutputCard(props: { filterProp: FilterProps }) {
               className={classNames(
                 'z-10 inline-flex h-[41px] items-center border-b-2 px-4 text-base font-medium transition active:transition-none',
                 modeSelected === 'Results'
-                  ? 'border-zinc-100 text-zinc-100 active:bg-zinc-900'
-                  : 'border-transparent text-zinc-500 hover:border-zinc-500 hover:text-zinc-300 active:bg-zinc-900',
+                  ? 'border-zinc-900 text-zinc-900 dark:border-zinc-100 dark:text-zinc-100 dark:active:bg-zinc-900'
+                  : 'border-transparent text-zinc-500 dark:hover:border-zinc-500 dark:hover:text-zinc-300 dark:active:bg-zinc-900',
               )}
               onClick={() => setModeSelect('Results')}
             >
@@ -495,8 +495,8 @@ function OutputCard(props: { filterProp: FilterProps }) {
               className={classNames(
                 'z-10 inline-flex h-[41px] items-center border-b-2 px-4 text-base font-medium transition active:transition-none',
                 modeSelected === 'Code'
-                  ? 'border-zinc-100 text-zinc-100 active:bg-zinc-900'
-                  : 'border-transparent text-zinc-500 hover:border-zinc-500 hover:text-zinc-300 active:bg-zinc-900',
+                  ? 'border-zinc-900 text-zinc-900 dark:border-zinc-100 dark:text-zinc-100 dark:active:bg-zinc-900'
+                  : 'border-transparent text-zinc-500 dark:hover:border-zinc-500 dark:hover:text-zinc-300 dark:active:bg-zinc-900',
               )}
               onClick={() => setModeSelect('Code')}
             >
@@ -504,7 +504,7 @@ function OutputCard(props: { filterProp: FilterProps }) {
             </button>
           </div>
           <div className="flex flex-row">
-            <div className="z-10 inline-flex h-[41px] items-center border-b-2 border-transparent text-base font-medium text-zinc-100">
+            <div className="z-10 inline-flex h-[41px] items-center border-b-2 border-transparent text-base font-medium dark:text-zinc-100">
               Credits: 3
             </div>
           </div>
@@ -609,7 +609,7 @@ function TypeSelector() {
               </span>
               <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
                 <ChevronDownIcon
-                  className="h-5 w-5 text-zinc-400"
+                  className="h-5 w-5 text-zinc-600 dark:text-zinc-400"
                   aria-hidden="true"
                 />
               </span>
@@ -621,14 +621,16 @@ function TypeSelector() {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-zinc-900 py-1 text-base shadow-lg ring-1 ring-zinc-100 ring-opacity-5 focus:outline-none sm:text-sm">
+              <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-zinc-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm dark:bg-zinc-900">
                 {typeList.map((item) => (
                   <ListboxOption
                     key={item.id}
                     className={({ focus }) =>
                       classNames(
-                        focus ? 'bg-zinc-700 text-zinc-300' : '',
-                        !focus ? 'text-zinc-400' : '',
+                        focus
+                          ? 'bg-zinc-300 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300'
+                          : '',
+                        !focus ? 'text-zinc-600 dark:text-zinc-400' : '',
                         'relative cursor-default select-none py-2 pl-3 pr-9',
                       )
                     }
@@ -698,8 +700,8 @@ function LongTextSelector(props: { list: any[] }) {
                   className={classNames(
                     'h-5 w-5 text-zinc-400',
                     selected.id === 0
-                      ? 'dark:text-zinc-100'
-                      : 'dark:text-zinc-100',
+                      ? 'text-zinc-900 dark:text-zinc-100'
+                      : 'text-zinc-900 dark:text-zinc-100',
                   )}
                   aria-hidden="true"
                 />
@@ -712,14 +714,16 @@ function LongTextSelector(props: { list: any[] }) {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-zinc-900 py-1 text-base shadow-lg ring-1 ring-zinc-100 ring-opacity-5 focus:outline-none sm:text-sm">
+              <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-zinc-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm dark:bg-zinc-900">
                 {props.list.map((item: any) => (
                   <ListboxOption
                     key={item.id}
                     className={({ focus }) =>
                       classNames(
-                        focus ? 'bg-zinc-700 text-zinc-300' : '',
-                        !focus ? 'text-zinc-400' : '',
+                        focus
+                          ? 'bg-zinc-300 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300'
+                          : '',
+                        !focus ? 'text-zinc-600 dark:text-zinc-400' : '',
                         'relative cursor-default select-none py-2 pl-3 pr-9',
                       )
                     }
@@ -785,8 +789,8 @@ function ShortTextSelector(props: { list: any[] }) {
                   className={classNames(
                     'h-5 w-5 text-zinc-400',
                     selected.id === 0
-                      ? 'dark:text-zinc-100'
-                      : 'dark:text-zinc-100',
+                      ? 'text-zinc-900 dark:text-zinc-100'
+                      : 'text-zinc-900 dark:text-zinc-100',
                   )}
                   aria-hidden="true"
                 />
@@ -799,14 +803,16 @@ function ShortTextSelector(props: { list: any[] }) {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-[120px] w-full overflow-auto rounded-md bg-zinc-900 py-1 text-base shadow-lg ring-1 ring-zinc-100 ring-opacity-5 focus:outline-none sm:text-sm">
+              <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-[120px] w-full overflow-auto rounded-md bg-zinc-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm dark:bg-zinc-900">
                 {props.list.map((item: any) => (
                   <ListboxOption
                     key={item.id}
                     className={({ focus }) =>
                       classNames(
-                        focus ? 'bg-zinc-700 text-zinc-300' : '',
-                        !focus ? 'text-zinc-400' : '',
+                        focus
+                          ? 'bg-zinc-300 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300'
+                          : '',
+                        !focus ? 'text-zinc-600 dark:text-zinc-400' : '',
                         'relative cursor-default select-none py-2 pl-3 pr-9',
                       )
                     }
@@ -828,7 +834,9 @@ function ShortTextSelector(props: { list: any[] }) {
                         {selected ? (
                           <span
                             className={classNames(
-                              focus ? 'text-zinc-900' : 'text-zinc-900',
+                              focus
+                                ? 'dark:text-zinc-900'
+                                : 'dark:text-zinc-900',
                               'absolute inset-y-0 right-0 flex items-center pr-4',
                             )}
                           >
