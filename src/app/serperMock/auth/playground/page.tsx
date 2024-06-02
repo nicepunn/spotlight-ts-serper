@@ -1,7 +1,22 @@
 'use client'
 /* eslint-disable @next/next/no-img-element */
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from '@headlessui/react'
+import {
+  ArrowDownLeftIcon,
+  Bars3Icon,
+  BellIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline'
 import { Button } from '@/components/Button'
-import { Fragment, useState } from 'react'
+import { Dispatch, Fragment, SetStateAction, useState } from 'react'
 import {
   Label,
   Listbox,
@@ -13,6 +28,7 @@ import {
 } from '@headlessui/react'
 import {
   AcademicCapIcon,
+  ArrowDownTrayIcon,
   CheckIcon,
   ChevronDownIcon,
   DocumentTextIcon,
@@ -77,20 +93,38 @@ interface FilterProps {
 }
 
 export default function Playground() {
+  const defaultFilterProps: FilterProps = {
+    Type: 'Search',
+    Query: 'OpenAI ChatGPT',
+    Country: 'United States',
+    Location: 'California',
+    Language: 'en',
+    DateRange: 'Past week',
+    Autocorrect: true,
+    Results: 20,
+    Page: 1,
+    MiniBatch: false,
+    CodingLanguage: 'JavaScript',
+    Method: 'GET',
+  }
+  const [filterProp, setFilterProp] = useState<FilterProps>(defaultFilterProps)
   return (
     <div className="flex w-full flex-col">
       <div className="text-2xl font-semibold lg:text-3xl dark:text-zinc-100">
         Playground
       </div>
       <div className="flex w-full flex-col gap-x-10 lg:flex-row">
-        <InputCard />
-        <OutputCard />
+        <InputCard filterProp={filterProp} setFilterProp={setFilterProp} />
+        <OutputCard filterProp={filterProp} />
       </div>
     </div>
   )
 }
 
-function InputCard() {
+function InputCard(props: {
+  filterProp: FilterProps
+  setFilterProp: Dispatch<SetStateAction<FilterProps>>
+}) {
   const [enabled, setEnabled] = useState(false)
   return (
     <div className="mt-12 flex h-fit w-full flex-col rounded-lg bg-zinc-100 px-6 py-5 shadow lg:mt-10 lg:w-[40vw] lg:min-w-[310px] dark:bg-zinc-900">
@@ -139,7 +173,7 @@ function InputCard() {
             Country
           </label>
           <div className="mt-1">
-            <TextSelector list={countryList} />
+            <LongTextSelector list={countryList} />
           </div>
         </div>
         <div>
@@ -150,7 +184,7 @@ function InputCard() {
             Location
           </label>
           <div className="mt-1">
-            <TextSelector list={locationList} />
+            <LongTextSelector list={locationList} />
           </div>
         </div>
         <div>
@@ -161,7 +195,7 @@ function InputCard() {
             Language
           </label>
           <div className="mt-1">
-            <TextSelector list={languageList} />
+            <LongTextSelector list={languageList} />
           </div>
         </div>
         <div className="flex w-full flex-row items-center gap-x-4">
@@ -173,7 +207,7 @@ function InputCard() {
               Date range
             </label>
             <div className="mt-1">
-              <TextSelector list={dateRangeList} />
+              <ShortTextSelector list={dateRangeList} />
             </div>
           </div>
           <div className="w-full">
@@ -188,7 +222,7 @@ function InputCard() {
                 id="Autocorrect"
                 name="Autocorrect"
                 type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-zinc-800 accent-zinc-800 focus:ring-zinc-800 dark:text-zinc-100 dark:accent-zinc-100 dark:focus:ring-zinc-100"
+                className="h-4 w-4 rounded border-zinc-700 text-zinc-800 accent-zinc-800 focus:ring-zinc-800 dark:text-zinc-100 dark:accent-zinc-100 dark:focus:ring-zinc-100"
               />
             </div>
           </div>
@@ -202,7 +236,7 @@ function InputCard() {
               Result
             </label>
             <div className="mt-1">
-              <TextSelector list={resultList} />
+              <ShortTextSelector list={resultList} />
             </div>
           </div>
           <div className="w-full">
@@ -240,11 +274,288 @@ function InputCard() {
   )
 }
 
-function OutputCard() {
+function OutputCard(props: { filterProp: FilterProps }) {
+  const defaultResult = `{
+    "searchParameters": {
+      "q": "apple inc",
+      "gl": "us",
+      "hl": "en",
+      "autocorrect": true,
+      "page": 1,
+      "type": "search"
+    },
+    "knowledgeGraph": {
+      "title": "Apple",
+      "type": "Technology company",
+      "website": "http://www.apple.com/",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwGQRv5TjjkycpctY66mOg_e2-npacrmjAb6_jAWhzlzkFE3OTjxyzbA&s=0",
+      "description": "Apple Inc. is an American multinational technology company specializing in consumer electronics, software and online services headquartered in Cupertino, California, United States.",
+      "descriptionSource": "Wikipedia",
+      "descriptionLink": "https://en.wikipedia.org/wiki/Apple_Inc.",
+      "attributes": {
+        "Headquarters": "Cupertino, CA",
+        "CEO": "Tim Cook (Aug 24, 2011–)",
+        "Founded": "April 1, 1976, Los Altos, CA",
+        "Sales": "1 (800) 692-7753",
+        "Products": "iPhone, Apple Watch, iPad, and more",
+        "Founders": "Steve Jobs, Steve Wozniak, and Ronald Wayne",
+        "Subsidiaries": "Apple Store, Beats Electronics, Beddit, and more"
+      }
+    },
+    "organic": [
+      {
+        "title": "Apple",
+        "link": "https://www.apple.com/",
+        "snippet": "Discover the innovative world of Apple and shop everything iPhone, iPad, Apple Watch, Mac, and Apple TV, plus explore accessories, entertainment, ...",
+        "sitelinks": [
+          {
+            "title": "Support",
+            "link": "https://support.apple.com/"
+          },
+          {
+            "title": "iPhone",
+            "link": "https://www.apple.com/iphone/"
+          },
+          {
+            "title": "Apple makes business better.",
+            "link": "https://www.apple.com/business/"
+          },
+          {
+            "title": "Mac",
+            "link": "https://www.apple.com/mac/"
+          }
+        ],
+        "position": 1
+      },
+      {
+        "title": "Apple Inc. - Wikipedia",
+        "link": "https://en.wikipedia.org/wiki/Apple_Inc.",
+        "snippet": "Apple Inc. is an American multinational technology company specializing in consumer electronics, software and online services headquartered in Cupertino, ...",
+        "attributes": {
+          "Products": "AirPods; Apple Watch; iPad; iPhone; Mac",
+          "Founders": "Steve Jobs; Steve Wozniak; Ronald Wayne",
+          "Founded": "April 1, 1976; 46 years ago in Los Altos, California, U.S",
+          "Industry": "Consumer electronics; Software services; Online services"
+        },
+        "sitelinks": [
+          {
+            "title": "History",
+            "link": "https://en.wikipedia.org/wiki/History_of_Apple_Inc."
+          },
+          {
+            "title": "Timeline of Apple Inc. products",
+            "link": "https://en.wikipedia.org/wiki/Timeline_of_Apple_Inc._products"
+          },
+          {
+            "title": "List of software by Apple Inc.",
+            "link": "https://en.wikipedia.org/wiki/List_of_software_by_Apple_Inc."
+          },
+          {
+            "title": "Apple Store",
+            "link": "https://en.wikipedia.org/wiki/Apple_Store"
+          }
+        ],
+        "position": 2
+      },
+      {
+        "title": "Apple Inc. | History, Products, Headquarters, & Facts | Britannica",
+        "link": "https://www.britannica.com/topic/Apple-Inc",
+        "snippet": "Apple Inc., formerly Apple Computer, Inc., American manufacturer of personal computers, smartphones, tablet computers, computer peripherals, ...",
+        "date": "Aug 31, 2022",
+        "attributes": {
+          "Related People": "Steve Jobs Steve Wozniak Jony Ive Tim Cook Angela Ahrendts",
+          "Date": "1976 - present",
+          "Areas Of Involvement": "peripheral device"
+        },
+        "position": 3
+      },
+      {
+        "title": "AAPL: Apple Inc Stock Price Quote - NASDAQ GS - Bloomberg.com",
+        "link": "https://www.bloomberg.com/quote/AAPL:US",
+        "snippet": "Stock analysis for Apple Inc (AAPL:NASDAQ GS) including stock price, stock chart, company news, key statistics, fundamentals and company profile.",
+        "position": 4
+      },
+      {
+        "title": "Apple Inc. (AAPL) Company Profile & Facts - Yahoo Finance",
+        "link": "https://finance.yahoo.com/quote/AAPL/profile/",
+        "snippet": "Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. It also sells various related ...",
+        "position": 5
+      },
+      {
+        "title": "AAPL | Apple Inc. Stock Price & News - WSJ",
+        "link": "https://www.wsj.com/market-data/quotes/AAPL",
+        "snippet": "Apple, Inc. engages in the design, manufacture, and sale of smartphones, personal computers, tablets, wearables and accessories, and other varieties of ...",
+        "position": 6
+      },
+      {
+        "title": "Apple Inc Company Profile - Apple Inc Overview - GlobalData",
+        "link": "https://www.globaldata.com/company-profile/apple-inc/",
+        "snippet": "Apple Inc (Apple) designs, manufactures, and markets smartphones, tablets, personal computers (PCs), portable and wearable devices. The company also offers ...",
+        "position": 7
+      },
+      {
+        "title": "Apple Inc (AAPL) Stock Price & News - Google Finance",
+        "link": "https://www.google.com/finance/quote/AAPL:NASDAQ?hl=en",
+        "snippet": "Get the latest Apple Inc (AAPL) real-time quote, historical performance, charts, and other financial information to help you make more informed trading and ...",
+        "position": 8
+      }
+    ],
+    "peopleAlsoAsk": [
+      {
+        "question": "What does Apple Inc mean?",
+        "snippet": "Apple Inc., formerly Apple Computer, Inc., American manufacturer of personal\ncomputers, smartphones, tablet computers, computer peripherals, and computer\nsoftware. It was the first successful personal computer company and the\npopularizer of the graphical user interface.\nAug 31, 2022",
+        "title": "Apple Inc. | History, Products, Headquarters, & Facts | Britannica",
+        "link": "https://www.britannica.com/topic/Apple-Inc"
+      },
+      {
+        "question": "Is Apple and Apple Inc same?",
+        "snippet": "Apple was founded as Apple Computer Company on April 1, 1976, by Steve Jobs,\nSteve Wozniak and Ronald Wayne to develop and sell Wozniak's Apple I personal\ncomputer. It was incorporated by Jobs and Wozniak as Apple Computer, Inc.",
+        "title": "Apple Inc. - Wikipedia",
+        "link": "https://en.wikipedia.org/wiki/Apple_Inc."
+      },
+      {
+        "question": "Who owns Apple Inc?",
+        "snippet": "Apple Inc. is owned by two main institutional investors (Vanguard Group and\nBlackRock, Inc). While its major individual shareholders comprise people like\nArt Levinson, Tim Cook, Bruce Sewell, Al Gore, Johny Sroujli, and others.",
+        "title": "Who Owns Apple In 2022? - FourWeekMBA",
+        "link": "https://fourweekmba.com/who-owns-apple/"
+      },
+      {
+        "question": "What products does Apple Inc offer?",
+        "snippet": "APPLE FOOTER\nStore.\nMac.\niPad.\niPhone.\nWatch.\nAirPods.\nTV & Home.\nAirTag.",
+        "title": "More items...",
+        "link": "https://www.apple.com/business/"
+      }
+    ],
+    "relatedSearches": [
+      {
+        "query": "Who invented the iPhone"
+      },
+      {
+        "query": "Apple Inc competitors"
+      },
+      {
+        "query": "Apple iPad"
+      },
+      {
+        "query": "iPhones"
+      },
+      {
+        "query": "Apple Inc us"
+      },
+      {
+        "query": "Apple company history"
+      },
+      {
+        "query": "Apple Store"
+      },
+      {
+        "query": "Apple customer service"
+      },
+      {
+        "query": "Apple Watch"
+      },
+      {
+        "query": "Apple Inc Industry"
+      },
+      {
+        "query": "Apple Inc registered address"
+      },
+      {
+        "query": "Apple Inc Bloomberg"
+      }
+    ]
+  }`
+  const defaultCode = `curl --location --request POST 'https://google.serper.dev/search' \\
+  --header 'X-API-KEY: 2aa1f782fa840f29ef0629249d621449d7235651' \\
+  --header 'Content-Type: application/json' \\
+  --data-raw '{"q":"apple inc"}'`
+  const [modeSelected, setModeSelect] = useState<'Results' | 'Code'>('Results')
+  const [resultJsonData, setResultJsonData] = useState(defaultResult)
+  const [code, setCode] = useState(defaultCode)
   return (
-    <div className="mt-2 flex h-[800px] w-full flex-col items-center justify-center rounded-lg bg-zinc-100 shadow dark:bg-zinc-900">
-      output raw
-    </div>
+    <nav className="mt-1 flex w-full flex-col overflow-auto bg-inherit">
+      <div className="relative flex h-10 justify-between">
+        <div className="flex w-full flex-row justify-between border-b-[1.5px] border-zinc-500">
+          {/* Current: "border-indigo-500 text-zinc-100", Default: "border-transparent text-zinc-500 hover:border-zinc-700 hover:text-zinc-300" */}
+          <div className="flex flex-row">
+            <button
+              type="button"
+              className={classNames(
+                'z-10 inline-flex h-[41px] items-center border-b-2 px-4 text-base font-medium transition active:transition-none',
+                modeSelected === 'Results'
+                  ? 'border-zinc-100 text-zinc-100 active:bg-zinc-900'
+                  : 'border-transparent text-zinc-500 hover:border-zinc-500 hover:text-zinc-300 active:bg-zinc-900',
+              )}
+              onClick={() => setModeSelect('Results')}
+            >
+              Results
+            </button>
+            <button
+              type="button"
+              className={classNames(
+                'z-10 inline-flex h-[41px] items-center border-b-2 px-4 text-base font-medium transition active:transition-none',
+                modeSelected === 'Code'
+                  ? 'border-zinc-100 text-zinc-100 active:bg-zinc-900'
+                  : 'border-transparent text-zinc-500 hover:border-zinc-500 hover:text-zinc-300 active:bg-zinc-900',
+              )}
+              onClick={() => setModeSelect('Code')}
+            >
+              Code
+            </button>
+          </div>
+          <div className="flex flex-row">
+            <div className="z-10 inline-flex h-[41px] items-center border-b-2 border-transparent text-base font-medium text-zinc-100">
+              Credits: 3
+            </div>
+          </div>
+        </div>
+      </div>
+      {modeSelected === 'Results' ? (
+        <div className="mt-4 flex w-full flex-col gap-y-0 overflow-auto rounded-lg bg-zinc-100 p-6 dark:bg-zinc-900">
+          <div className="flex w-full flex-row-reverse">
+            <Button
+              variant="secondary"
+              className="h-9 items-center gap-x-2 pl-3 pr-4"
+            >
+              <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
+              Download
+            </Button>
+          </div>
+          <pre
+            className="overflow-scroll text-[12px]/[18px] font-extralight"
+            id="json"
+          >
+            {resultJsonData}
+          </pre>
+        </div>
+      ) : (
+        <div className="mt-4 flex min-h-48 w-full flex-col gap-y-4 overflow-auto rounded-lg bg-zinc-100 p-6 dark:bg-zinc-900">
+          <div className="flex h-10 w-full flex-row-reverse gap-x-2">
+            <Button
+              variant="secondary"
+              className="h-full items-center gap-x-2 px-4"
+            >
+              Copy
+            </Button>
+            <div className="h-full min-w-40">
+              <ShortTextSelector list={methodList} />
+            </div>
+            <div className="h-full min-w-40">
+              <ShortTextSelector list={codingLanguageList} />
+            </div>
+          </div>
+          {code === '' ? (
+            <div className="flex h-full w-full items-center justify-center text-zinc-700">
+              No query input
+            </div>
+          ) : (
+            <pre className="overflow-scroll whitespace-pre-wrap text-[12px]/[18px] font-extralight">
+              {code}
+            </pre>
+          )}
+        </div>
+      )}
+    </nav>
   )
 }
 
@@ -363,7 +674,7 @@ function TypeSelector() {
   )
 }
 
-function TextSelector(props: { list: any[] }) {
+function LongTextSelector(props: { list: any[] }) {
   const [selected, setSelected] = useState((props.list ?? [])[0])
 
   return (
@@ -450,6 +761,92 @@ function TextSelector(props: { list: any[] }) {
   )
 }
 
+function ShortTextSelector(props: { list: any[] }) {
+  const [selected, setSelected] = useState((props.list ?? [])[0])
+
+  return (
+    <Listbox value={selected} onChange={setSelected}>
+      {({ open }) => (
+        <>
+          <div className="relative w-full">
+            <ListboxButton
+              className={classNames(
+                'relative h-10 w-full cursor-default rounded-md bg-zinc-50 py-1.5 pl-3 pr-10 text-left text-base font-normal shadow-sm outline-offset-2 transition hover:bg-zinc-100 active:bg-zinc-100 active:transition-none disabled:cursor-not-allowed disabled:text-zinc-600 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 dark:active:bg-zinc-800/50 disabled:dark:text-zinc-400',
+                selected.id === 0
+                  ? 'text-zinc-300 active:text-zinc-600/40 dark:text-zinc-600'
+                  : 'text-zinc-900 active:text-zinc-900/80 dark:text-zinc-100 dark:hover:text-zinc-50 dark:active:text-zinc-50/70',
+              )}
+            >
+              <span className="flex items-center">
+                {selected.id === 0 ? 'Optional' : selected.name}
+              </span>
+              <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                <ChevronDownIcon
+                  className={classNames(
+                    'h-5 w-5 text-zinc-400',
+                    selected.id === 0
+                      ? 'dark:text-zinc-100'
+                      : 'dark:text-zinc-100',
+                  )}
+                  aria-hidden="true"
+                />
+              </span>
+            </ListboxButton>
+
+            <Transition
+              show={open}
+              leave="transition ease-in duration-100"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-[120px] w-full overflow-auto rounded-md bg-zinc-900 py-1 text-base shadow-lg ring-1 ring-zinc-100 ring-opacity-5 focus:outline-none sm:text-sm">
+                {props.list.map((item: any) => (
+                  <ListboxOption
+                    key={item.id}
+                    className={({ focus }) =>
+                      classNames(
+                        focus ? 'bg-zinc-700 text-zinc-300' : '',
+                        !focus ? 'text-zinc-400' : '',
+                        'relative cursor-default select-none py-2 pl-3 pr-9',
+                      )
+                    }
+                    value={item}
+                  >
+                    {({ selected, focus }) => (
+                      <>
+                        <div className="flex items-center">
+                          <span
+                            className={classNames(
+                              selected ? 'font-semibold' : 'font-normal',
+                              'ml-3 block truncate',
+                            )}
+                          >
+                            {item.name}
+                          </span>
+                        </div>
+
+                        {selected ? (
+                          <span
+                            className={classNames(
+                              focus ? 'text-zinc-900' : 'text-zinc-900',
+                              'absolute inset-y-0 right-0 flex items-center pr-4',
+                            )}
+                          >
+                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                          </span>
+                        ) : null}
+                      </>
+                    )}
+                  </ListboxOption>
+                ))}
+              </ListboxOptions>
+            </Transition>
+          </div>
+        </>
+      )}
+    </Listbox>
+  )
+}
 const typeList = [
   {
     id: 1,
@@ -739,3 +1136,26 @@ const resultList = [
   { id: 5, name: 50, aka: '' },
   { id: 6, name: 100, aka: '' },
 ]
+
+const codingLanguageList = [
+  { id: 1, name: 'C#', aka: 'CSharp' },
+  { id: 2, name: 'cURL', aka: 'cURL' },
+  { id: 3, name: 'Dart', aka: 'Dart' },
+  { id: 4, name: 'Go', aka: 'Go' },
+  { id: 5, name: 'HTTP', aka: 'HTTP' },
+  { id: 6, name: 'Java', aka: 'Java' },
+  { id: 7, name: 'JavaScript', aka: 'JavaScript' },
+  { id: 8, name: 'C', aka: 'C' },
+  { id: 9, name: 'NodeJs', aka: 'NodeJs' },
+  { id: 10, name: 'Objective-C', aka: 'ObjectiveC' },
+  { id: 11, name: 'OCaml', aka: 'OCaml' },
+  { id: 12, name: 'PHP', aka: 'PHP' },
+  { id: 13, name: 'PowerShell', aka: 'PowerShell' },
+  { id: 14, name: 'Python', aka: 'Python' },
+  { id: 15, name: 'R', aka: 'R' },
+  { id: 16, name: 'Ruby', aka: 'Ruby' },
+  { id: 17, name: 'Shell', aka: 'Shell' },
+  { id: 18, name: 'Swift', aka: 'Swift' },
+]
+
+const methodList = [{ id: 1, name: 'cURL', aka: 'cURL' }]

@@ -7,12 +7,13 @@ import { Switch } from '@headlessui/react'
 export default function Logs() {
   const [enabled, setEnabled] = useState(false)
   return (
-    <div className="flex w-full min-w-[718px] flex-col">
+    // <div className="flex w-full min-w-[718px] flex-col">
+    <div className="flex w-full flex-col">
       <div className="text-2xl font-semibold lg:text-3xl dark:text-zinc-100">
         Activity logs
       </div>
       <div className="mt-1 flex h-10 w-full flex-row items-center justify-between lg:mt-[6px]">
-        <div className="text-base font-normal dark:text-zinc-200">
+        <div className="line-clamp-1 text-base font-normal dark:text-zinc-200">
           An overview of your latest requests
         </div>
         <div className="flex w-fit flex-row-reverse items-center gap-x-8">
@@ -20,7 +21,7 @@ export default function Logs() {
             Refresh
           </Button>
           <div className="flex flex-row items-center gap-x-2">
-            <div className="text-base font-normal dark:text-zinc-200">
+            <div className="line-clamp-1 text-base font-normal dark:text-zinc-200">
               Anonymize queries
             </div>
             <MySwitch enabled={enabled} setEnabled={setEnabled} />

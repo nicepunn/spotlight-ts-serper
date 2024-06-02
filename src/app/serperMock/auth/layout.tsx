@@ -156,7 +156,7 @@ export default function AuthLayout({
                                   item.href == lastSegment
                                     ? 'bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-100'
                                     : 'hover:bg-zinc-200 dark:text-zinc-400 hover:dark:bg-zinc-800 hover:dark:text-zinc-100',
-                                  'group flex h-10 gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
+                                  'group flex h-10 gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 transition active:transition-none',
                                 )}
                               >
                                 <item.icon
@@ -178,7 +178,7 @@ export default function AuthLayout({
                               lastSegment === 'settings'
                                 ? 'bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-100'
                                 : 'hover:bg-zinc-200 dark:text-zinc-400 hover:dark:bg-zinc-800 hover:dark:text-zinc-100',
-                              'group -mx-2 flex h-10 gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 ',
+                              'group -mx-2 flex h-10 gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 transition active:transition-none ',
                             )}
                           >
                             <Cog6ToothIcon
@@ -195,7 +195,7 @@ export default function AuthLayout({
                               lastSegment === 'support'
                                 ? 'bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-100'
                                 : 'hover:bg-zinc-200 dark:text-zinc-400 hover:dark:bg-zinc-800 hover:dark:text-zinc-100',
-                              'group -mx-2 flex h-10 gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 ',
+                              'group -mx-2 flex h-10 gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 transition active:transition-none ',
                             )}
                           >
                             <ChatBubbleOvalLeftIcon
@@ -210,7 +210,7 @@ export default function AuthLayout({
                           <MenuButton className="mt-auto w-full">
                             <a
                               href="#"
-                              className="flex w-full items-center justify-start gap-x-3 rounded-md px-2 py-2 hover:bg-zinc-200 hover:dark:bg-zinc-800"
+                              className="flex w-full items-center justify-start gap-x-3 rounded-md px-2 py-2 transition hover:bg-zinc-200 active:transition-none hover:dark:bg-zinc-800"
                             >
                               <img
                                 className="h-10 w-10 rounded-full dark:bg-zinc-800"
@@ -253,7 +253,7 @@ export default function AuthLayout({
                                         focus
                                           ? 'bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-100'
                                           : 'dark:text-zinc-400',
-                                        'block px-4 py-2 text-sm',
+                                        'block px-4 py-2 text-sm transition active:transition-none',
                                       )}
                                     >
                                       Billing
@@ -268,7 +268,7 @@ export default function AuthLayout({
                                         focus
                                           ? 'bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-100'
                                           : 'dark:text-zinc-400',
-                                        'block px-4 py-2 text-sm',
+                                        'block px-4 py-2 text-sm transition active:transition-none',
                                       )}
                                     >
                                       Settings
@@ -285,7 +285,7 @@ export default function AuthLayout({
                                         focus
                                           ? 'bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-100'
                                           : 'dark:text-zinc-400',
-                                        'block px-4 py-2 text-sm',
+                                        'block px-4 py-2 text-sm transition active:transition-none',
                                       )}
                                     >
                                       Logout
@@ -344,7 +344,7 @@ export default function AuthLayout({
                           item.href == lastSegment
                             ? 'bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-100'
                             : 'hover:bg-zinc-200 dark:text-zinc-400 hover:dark:bg-zinc-800 hover:dark:text-zinc-100',
-                          'group flex h-10 gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
+                          'group flex h-10 gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 transition active:transition-none',
                         )}
                       >
                         <item.icon
@@ -366,7 +366,7 @@ export default function AuthLayout({
                       lastSegment === 'settings'
                         ? 'bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-100'
                         : 'hover:bg-zinc-200 dark:text-zinc-400 hover:dark:bg-zinc-800 hover:dark:text-zinc-100',
-                      'group -mx-2 flex h-10 gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 ',
+                      'group -mx-2 flex h-10 gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 transition active:transition-none ',
                     )}
                   >
                     <Cog6ToothIcon
@@ -383,7 +383,7 @@ export default function AuthLayout({
                       lastSegment === 'support'
                         ? 'bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-100'
                         : 'hover:bg-zinc-200 dark:text-zinc-400 hover:dark:bg-zinc-800 hover:dark:text-zinc-100',
-                      'group -mx-2 flex h-10 gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 ',
+                      'group -mx-2 flex h-10 gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 transition active:transition-none ',
                     )}
                   >
                     <ChatBubbleOvalLeftIcon
@@ -398,7 +398,7 @@ export default function AuthLayout({
                   <MenuButton className="mt-auto w-full">
                     <a
                       href="#"
-                      className="flex w-full items-center justify-start gap-x-3 rounded-md px-2 py-2 hover:bg-zinc-200 hover:dark:bg-zinc-800"
+                      className="flex w-full items-center justify-start gap-x-3 rounded-md px-2 py-2 transition hover:bg-zinc-200 active:transition-none hover:dark:bg-zinc-800"
                     >
                       <img
                         className="h-10 w-10 rounded-full dark:bg-zinc-800"
@@ -441,7 +441,7 @@ export default function AuthLayout({
                                 focus
                                   ? 'bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-100'
                                   : 'dark:text-zinc-400',
-                                'block px-4 py-2 text-sm',
+                                'block px-4 py-2 text-sm transition active:transition-none',
                               )}
                             >
                               Billing
@@ -456,7 +456,7 @@ export default function AuthLayout({
                                 focus
                                   ? 'bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-100'
                                   : 'dark:text-zinc-400',
-                                'block px-4 py-2 text-sm',
+                                'block px-4 py-2 text-sm transition active:transition-none',
                               )}
                             >
                               Settings
@@ -473,7 +473,7 @@ export default function AuthLayout({
                                 focus
                                   ? 'bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-100'
                                   : 'dark:text-zinc-400',
-                                'block px-4 py-2 text-sm',
+                                'block px-4 py-2 text-sm transition active:transition-none',
                               )}
                             >
                               Logout
