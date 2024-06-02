@@ -57,7 +57,7 @@ export default function Dashboard() {
 
 function MyGraph() {
   return (
-    <div className="flex h-[450px] w-full flex-col overflow-hidden rounded-lg bg-zinc-100 px-4 dark:bg-zinc-900">
+    <div className="flex h-fit w-full flex-col overflow-hidden rounded-lg bg-zinc-100 px-4 dark:bg-zinc-900">
       <form
         action="#"
         method="POST"
@@ -104,6 +104,9 @@ function MyGraph() {
           </div>
         </div>
       </form>
+      <div className="flex h-[390px] w-full items-center justify-center">
+        No graph, datepicker on tailwindUI
+      </div>
     </div>
   )
 }
