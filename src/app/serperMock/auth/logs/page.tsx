@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/Button'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Switch } from '@headlessui/react'
 
 export default function Logs() {
@@ -65,7 +65,7 @@ function MySwitch(props: {
   )
 }
 
-const people = [
+const allRequests = [
   {
     Id: 1,
     Time: '2024-05-26 19:10:25',
@@ -109,7 +109,7 @@ const people = [
     Type: 'search',
     GI: '',
     HI: '',
-    Page: '1',
+    Page: '2',
     Num: '100',
     Credits: '2',
     ResponseTime: '1853',
@@ -126,15 +126,397 @@ const people = [
     Credits: '2',
     ResponseTime: '1853',
   },
+  {
+    Id: 6,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '3',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 7,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 8,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1842',
+  },
+  {
+    Id: 9,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 10,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1878',
+  },
+  {
+    Id: 11,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1753',
+  },
+  {
+    Id: 12,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 13,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1663',
+  },
+  {
+    Id: 14,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '2',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 15,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 16,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '3',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 17,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 18,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 19,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'videos',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 20,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 21,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 22,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 23,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '4',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 24,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 25,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '2',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 26,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 27,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 28,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1704',
+  },
+  {
+    Id: 29,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 30,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1863',
+  },
+  {
+    Id: 31,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 32,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1452',
+  },
+  {
+    Id: 33,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 34,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1527',
+  },
+  {
+    Id: 35,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1853',
+  },
+  {
+    Id: 36,
+    Time: '2024-05-26 19:10:25',
+    Query: '*****',
+    Type: 'search',
+    GI: '',
+    HI: '',
+    Page: '1',
+    Num: '100',
+    Credits: '2',
+    ResponseTime: '1893',
+  },
 ]
 
 function MyTable() {
+  const limitReq = 10
+  const totalPage = allRequests.length / limitReq
+  const [page, setPage] = useState(1)
+  const [showRequests, setShowRequests] = useState<any>(
+    allRequests.slice(0, 10),
+  )
+
+  useEffect(() => {
+    setShowRequests(allRequests.slice(limitReq * (page - 1), limitReq * page))
+  }, [page])
   return (
-    <div className="w-full bg-zinc-100 dark:bg-zinc-900">
+    <div className="w-full rounded-b-md bg-zinc-100 pb-1 shadow dark:bg-zinc-900">
       <div className="mx-auto max-w-7xl">
         <div className="flow-root">
           <div className="overflow-x-auto">
-            <div className="inline-block min-w-full px-6 align-middle">
+            <div className="inline-block min-w-full divide-y divide-zinc-200 px-6 align-middle dark:divide-zinc-800">
               <table className="min-w-full divide-y divide-zinc-300 dark:divide-zinc-700">
                 <thead>
                   <tr>
@@ -195,39 +577,61 @@ function MyTable() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
-                  {people.map((person) => (
-                    <tr key={person.Id}>
+                  {showRequests.map((req: any) => (
+                    <tr key={req.Id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0 dark:text-zinc-100">
-                        {person.Time}
+                        {req.Time}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {person.Query}
+                        {req.Query}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {person.Type}
+                        {req.Type}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {person.GI}
+                        {req.GI}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {person.HI}
+                        {req.HI}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {person.Page}
+                        {req.Page}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {person.Num}
+                        {req.Num}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {person.Credits}
+                        {req.Credits}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {person.ResponseTime}
+                        {req.ResponseTime}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+              <div className="flex w-full flex-row-reverse gap-x-2 py-4">
+                <Button
+                  onClick={() => {
+                    setPage(page + 1)
+                  }}
+                  disabled={page >= totalPage}
+                  variant="secondary"
+                  className="box-border border border-inherit px-4 disabled:cursor-not-allowed disabled:border-zinc-200 disabled:bg-inherit disabled:text-zinc-300 disabled:hover:border disabled:hover:border-zinc-200 disabled:hover:bg-inherit disabled:hover:text-zinc-300 dark:disabled:border-zinc-800 dark:disabled:text-zinc-700 dark:disabled:hover:border-zinc-800 dark:disabled:hover:text-zinc-700"
+                >
+                  Next
+                </Button>
+                <Button
+                  onClick={() => {
+                    setPage(page - 1)
+                  }}
+                  disabled={page <= 1}
+                  variant="secondary"
+                  className="box-border border border-inherit px-4 disabled:cursor-not-allowed disabled:border-zinc-200 disabled:bg-inherit disabled:text-zinc-300 disabled:hover:border disabled:hover:border-zinc-200 disabled:hover:bg-inherit disabled:hover:text-zinc-300 dark:disabled:border-zinc-800 dark:disabled:text-zinc-700 dark:disabled:hover:border-zinc-800 dark:disabled:hover:text-zinc-700"
+                >
+                  Previous
+                </Button>
+              </div>
             </div>
           </div>
         </div>

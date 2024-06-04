@@ -4,6 +4,7 @@ import { Button } from '@/components/Button'
 import { KeyIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { useState } from 'react'
+import chip from './_assets/chip.png'
 
 export default function Billing() {
   return (
@@ -37,7 +38,27 @@ function PaymentDetailsCard() {
         Payment details
       </div>
       <form className="flex w-full flex-col items-center" action="#">
-        <div className="mt-5 h-[183px] w-[290px] rounded-2xl bg-inherit bg-zinc-400"></div>
+        <div className="mt-5 h-[183px] w-[290px] rounded-2xl bg-zinc-400 px-7 py-4">
+          <div className="flex h-[26px] w-[36px] items-center justify-center overflow-hidden rounded-sm bg-zinc-300">
+            <Image src={chip} alt={''} />
+          </div>
+          <div className="mt-9 flex w-full flex-row text-xl font-semibold tracking-[0.15em]">
+            **** **** **** ••••
+          </div>
+          <div className="flex w-full flex-row justify-between">
+            <div className="mt-6 text-sm font-semibold tracking-widest">
+              XXXXXX XXXXXX
+            </div>
+            <div className="flex flex-col items-center text-zinc-300">
+              <div className="mt-3 text-[10px]/[12px] font-normal">
+                valid thru
+              </div>
+              <div className="text-[20px]/[20px] font-semibold tracking-wider">
+                ••/••
+              </div>
+            </div>
+          </div>
+        </div>
         <Button
           type="submit"
           variant="secondary"

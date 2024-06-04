@@ -83,7 +83,7 @@ function MyGraph() {
             </option>
           </select>
           <select
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-md border-r-[12px] border-solid border-transparent bg-zinc-50 py-2 pl-3 pr-1 text-base font-normal text-zinc-900 outline-offset-2 transition hover:bg-zinc-100 active:bg-zinc-100 active:text-zinc-900/60 active:transition-none disabled:text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:active:bg-zinc-800/50 dark:active:text-zinc-50/70 disabled:dark:text-zinc-400"
+            className="line-clamp-1 inline-flex h-10 items-center justify-center gap-2 rounded-md border-r-[12px] border-solid border-transparent bg-zinc-50 py-2 pl-3 pr-1 text-base font-normal text-zinc-900 outline-offset-2 transition hover:bg-zinc-100 active:bg-zinc-100 active:text-zinc-900/60 active:transition-none disabled:text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:active:bg-zinc-800/50 dark:active:text-zinc-50/70 disabled:dark:text-zinc-400"
             id="date-picker"
             name="date-picker"
           >
