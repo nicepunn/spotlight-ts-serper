@@ -1,7 +1,13 @@
 'use client'
 
 import { Button } from '@/components/Button'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
 import { Switch } from '@headlessui/react'
 
 export default function Logs() {
@@ -502,136 +508,170 @@ const allRequests = [
 
 function MyTable() {
   const limitReq = 10
-  const totalPage = allRequests.length / limitReq
   const [page, setPage] = useState(1)
   const [showRequests, setShowRequests] = useState<any>(
     allRequests.slice(0, 10),
   )
 
+  const fetchReq = useCallback(async (_page: number, _limitReq: number) => {
+    try {
+      const response = await fetch(
+        `https://api.serper.dev/stats/logs?offset=${
+          _limitReq * (_page - 1)
+        }&limit=${_limitReq}`,
+        {
+          headers: {
+            accept: 'application/json, text/plain, */*',
+            'accept-language': 'en-US,en;q=0.9,ja;q=0.8',
+            'cache-control': 'no-cache',
+            pragma: 'no-cache',
+            priority: 'u=1, i',
+            'sec-ch-ua':
+              '"Google Chrome";v="125", "Chromium";v="125", "Not.A/Brand";v="24"',
+            'sec-ch-ua-mobile': '?1',
+            'sec-ch-ua-platform': '"Android"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            cookie:
+              '_ga=GA1.1.1971740701.1716871086; _gcl_au=1.1.616450131.1716871086.369678705.1717293775.1717293775; connect.sid=s%3ALcMepT4fa3qifEFTs6Zu-ZxPOs_AL7Qg.8LVtybUiH71lfJB75qbxAjdYkD%2B%2F9sGzVUt1CWvLOak; _clck=r4vuaq%7C2%7Cfmc%7C0%7C1609; _clsk=gr2zso%7C1717486584370%7C10%7C1%7Co.clarity.ms%2Fcollect; _ga_M5LDW4K59C=GS1.1.1717484391.30.1.1717486597.0.0.0; __cf_bm=JYe0Q02BAOjls4Hx6Rj7nSe95VHVyYXvP40hwXskltw-1717486600-1.0.1.1-6..yBY.SdBuSsl1LvOLvDddhr35JzJTljeYN6UeyfHmWx37zfcBrR0b_woujuhaKD3eN_jk4bJdhS.L3.W2CcQ',
+            Referer: 'https://serper.dev/',
+            'Referrer-Policy': 'strict-origin-when-cross-origin',
+          },
+          body: null,
+          method: 'GET',
+        },
+      )
+      const result = await response.json()
+      console.log(result)
+    } catch (error) {
+      console.log(`error: ${error}`)
+    }
+  }, [])
+
   useEffect(() => {
+    // fetchReq(page, limitReq)
     setShowRequests(allRequests.slice(limitReq * (page - 1), limitReq * page))
-  }, [page])
+  }, [fetchReq, page])
   return (
     <div className="w-full rounded-b-md bg-zinc-100 pb-1 shadow dark:bg-zinc-900">
       <div className="mx-auto max-w-7xl">
-        <div className="flow-root">
-          <div className="overflow-x-auto">
-            <div className="inline-block min-w-full divide-y divide-zinc-200 px-6 align-middle dark:divide-zinc-800">
-              <table className="min-w-full divide-y divide-zinc-300 dark:divide-zinc-700">
-                <thead>
-                  <tr>
-                    <th
-                      scope="col"
-                      className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold sm:pl-0 dark:text-zinc-100"
-                    >
-                      Time
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
-                    >
-                      Query
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
-                    >
-                      Type
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
-                    >
-                      GI
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
-                    >
-                      HI
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
-                    >
-                      Page
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
-                    >
-                      Num
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
-                    >
-                      Credits
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
-                    >
-                      Response time (ms)
-                    </th>
+        <div className="overflow-x-auto">
+          <div className="inline-block min-w-full divide-y divide-zinc-200 overflow-x-auto px-6 align-middle dark:divide-zinc-800">
+            <table className="min-w-full divide-y divide-zinc-300 dark:divide-zinc-700">
+              <thead>
+                <tr>
+                  <th
+                    scope="col"
+                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold sm:pl-0 dark:text-zinc-100"
+                  >
+                    Time
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
+                  >
+                    Query
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
+                  >
+                    Type
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
+                  >
+                    GI
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
+                  >
+                    HI
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
+                  >
+                    Page
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
+                  >
+                    Num
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
+                  >
+                    Credits
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold dark:text-zinc-100"
+                  >
+                    Response time (ms)
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                {showRequests.map((req: any) => (
+                  <tr key={req.Id}>
+                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0 dark:text-zinc-100">
+                      {req.Time}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
+                      {req.Query}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
+                      {req.Type}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
+                      {req.GI}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
+                      {req.HI}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
+                      {req.Page}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
+                      {req.Num}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
+                      {req.Credits}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
+                      {req.ResponseTime}
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
-                  {showRequests.map((req: any) => (
-                    <tr key={req.Id}>
-                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0 dark:text-zinc-100">
-                        {req.Time}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {req.Query}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {req.Type}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {req.GI}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {req.HI}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {req.Page}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {req.Num}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {req.Credits}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-zinc-300">
-                        {req.ResponseTime}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div className="flex w-full flex-row-reverse gap-x-2 py-4">
-                <Button
-                  onClick={() => {
-                    setPage(page + 1)
-                  }}
-                  disabled={page >= totalPage}
-                  variant="secondary"
-                  className="box-border border border-inherit px-4 disabled:cursor-not-allowed disabled:border-zinc-200 disabled:bg-inherit disabled:text-zinc-300 disabled:hover:border disabled:hover:border-zinc-200 disabled:hover:bg-inherit disabled:hover:text-zinc-300 dark:disabled:border-zinc-800 dark:disabled:text-zinc-700 dark:disabled:hover:border-zinc-800 dark:disabled:hover:text-zinc-700"
-                >
-                  Next
-                </Button>
-                <Button
-                  onClick={() => {
-                    setPage(page - 1)
-                  }}
-                  disabled={page <= 1}
-                  variant="secondary"
-                  className="box-border border border-inherit px-4 disabled:cursor-not-allowed disabled:border-zinc-200 disabled:bg-inherit disabled:text-zinc-300 disabled:hover:border disabled:hover:border-zinc-200 disabled:hover:bg-inherit disabled:hover:text-zinc-300 dark:disabled:border-zinc-800 dark:disabled:text-zinc-700 dark:disabled:hover:border-zinc-800 dark:disabled:hover:text-zinc-700"
-                >
-                  Previous
-                </Button>
-              </div>
+                ))}
+              </tbody>
+            </table>
+            <div className="flex w-full flex-row-reverse gap-x-2 py-4">
+              <Button
+                onClick={() => {
+                  setPage(page + 1)
+                }}
+                disabled={showRequests.length < limitReq}
+                variant="secondary"
+                className="box-border border border-inherit px-4 disabled:cursor-not-allowed disabled:border-zinc-200 disabled:bg-inherit disabled:text-zinc-300 disabled:hover:border disabled:hover:border-zinc-200 disabled:hover:bg-inherit disabled:hover:text-zinc-300 dark:disabled:border-zinc-800 dark:disabled:text-zinc-700 dark:disabled:hover:border-zinc-800 dark:disabled:hover:text-zinc-700"
+              >
+                Next
+              </Button>
+              <Button
+                onClick={() => {
+                  setPage(page - 1)
+                }}
+                disabled={page <= 1}
+                variant="secondary"
+                className="box-border border border-inherit px-4 disabled:cursor-not-allowed disabled:border-zinc-200 disabled:bg-inherit disabled:text-zinc-300 disabled:hover:border disabled:hover:border-zinc-200 disabled:hover:bg-inherit disabled:hover:text-zinc-300 dark:disabled:border-zinc-800 dark:disabled:text-zinc-700 dark:disabled:hover:border-zinc-800 dark:disabled:hover:text-zinc-700"
+              >
+                Previous
+              </Button>
             </div>
           </div>
         </div>

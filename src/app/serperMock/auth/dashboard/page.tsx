@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/Button'
 import { KeyIcon } from '@heroicons/react/24/outline'
 
@@ -82,18 +84,18 @@ function MyGraph() {
               Credits
             </option>
           </select>
-          <select
+          <input
+            type="date"
             className="line-clamp-1 inline-flex h-10 items-center justify-center gap-2 rounded-md border-r-[12px] border-solid border-transparent bg-zinc-50 py-2 pl-3 pr-1 text-base font-normal text-zinc-900 outline-offset-2 transition hover:bg-zinc-100 active:bg-zinc-100 active:text-zinc-900/60 active:transition-none disabled:text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:active:bg-zinc-800/50 dark:active:text-zinc-50/70 disabled:dark:text-zinc-400"
             id="date-picker"
             name="date-picker"
-          >
-            <option
+          />
+          {/* <option
               className=" line-clamp-1 text-base font-normal dark:bg-zinc-800 dark:text-zinc-100"
               value="datePicker"
             >
               05/16/2024 - 05/30/2024
-            </option>
-          </select>
+            </option> */}
         </div>
         <div className="flex flex-col items-end gap-y-1">
           <div className="text-sm font-normal leading-4 text-zinc-800 dark:text-zinc-200">
@@ -104,9 +106,103 @@ function MyGraph() {
           </div>
         </div>
       </form>
-      <div className="flex h-[390px] w-full items-center justify-center">
-        No graph, datepicker on tailwindUI
+      <div className="flex h-fit w-full items-center justify-center py-4">
+        <MyBarChart />
       </div>
+    </div>
+  )
+}
+
+import { BarChart, Card, Divider, Switch } from '@tremor/react'
+import { useState } from 'react'
+
+const data = [
+  {
+    date: 'Jan 23',
+    'This Year': 68560,
+    'Last Year': 28560,
+  },
+  {
+    date: 'Feb 23',
+    'This Year': 70320,
+    'Last Year': 30320,
+  },
+  {
+    date: 'Mar 23',
+    'This Year': 80233,
+    'Last Year': 70233,
+  },
+  {
+    date: 'Apr 23',
+    'This Year': 55123,
+    'Last Year': 45123,
+  },
+  {
+    date: 'May 23',
+    'This Year': 56000,
+    'Last Year': 80600,
+  },
+  {
+    date: 'Jun 23',
+    'This Year': 100000,
+    'Last Year': 85390,
+  },
+  {
+    date: 'Jul 23',
+    'This Year': 85390,
+    'Last Year': 45340,
+  },
+  {
+    date: 'Aug 23',
+    'This Year': 80100,
+    'Last Year': 70120,
+  },
+  {
+    date: 'Sep 23',
+    'This Year': 75090,
+    'Last Year': 69450,
+  },
+  {
+    date: 'Oct 23',
+    'This Year': 71080,
+    'Last Year': 63345,
+  },
+  {
+    date: 'Nov 23',
+    'This Year': 61210,
+    'Last Year': 100330,
+  },
+  {
+    date: 'Dec 23',
+    'This Year': 60143,
+    'Last Year': 45321,
+  },
+]
+
+function valueFormatter(number: number) {
+  const formatter = new Intl.NumberFormat('en-US', {
+    maximumFractionDigits: 0,
+    notation: 'compact',
+    compactDisplay: 'short',
+    style: 'currency',
+    currency: 'USD',
+  })
+
+  return formatter.format(number)
+}
+
+function MyBarChart() {
+  return (
+    <div className="w-full">
+      <BarChart
+        data={data}
+        index="date"
+        categories={['This Year']}
+        colors={['blue']}
+        valueFormatter={valueFormatter}
+        yAxisWidth={45}
+        className="h-[360px] sm:block"
+      />
     </div>
   )
 }

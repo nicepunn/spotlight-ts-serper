@@ -17,6 +17,9 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+  .recharts-text {
+    color: white;
+  }
 }
 
 pre .json-key {
