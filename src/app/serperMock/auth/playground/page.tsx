@@ -591,14 +591,14 @@ function OutputCard(props: {
             >
               Copy
             </Button>
-            <div className="h-full min-w-40">
+            <div className="h-full w-full sm:w-fit sm:min-w-40">
               <ShortTextSelector
                 control={control}
                 label="Method"
                 list={methodList}
               />
             </div>
-            <div className="h-full min-w-40">
+            <div className="h-full w-full sm:w-fit sm:min-w-40">
               <ShortTextSelector
                 control={control}
                 label="CodingLanguage"
