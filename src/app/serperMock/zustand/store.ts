@@ -35,7 +35,6 @@ const useStore = create<MyState>()(
     }),
     {
       name: 'filter-props', // name of the item in storage
-      getStorage: () => localStorage, // (optional) by default localStorage is used
     },
   ),
 )

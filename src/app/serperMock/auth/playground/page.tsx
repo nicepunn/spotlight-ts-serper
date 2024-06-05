@@ -1,7 +1,14 @@
 'use client'
 /* eslint-disable @next/next/no-img-element */
 import { Button } from '@/components/Button'
-import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react'
+import {
+  Dispatch,
+  Fragment,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import {
   Label,
   Listbox,
@@ -60,6 +67,19 @@ export default function Playground() {
 
   const filterProp = useStore((state) => state.filterProps)
   const setFilterProp = useStore((state) => state.setFilterProps)
+
+  const [initLoading, setInitLoading] = useState(true)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setInitLoading(false)
+    }, 50) // Set the delay to 1 second
+
+    // Cleanup the timer on component unmount
+    return () => clearTimeout(timer)
+  }, [])
+  if (initLoading) {
+    return <></>
+  }
   return (
     <div className="flex w-full flex-col">
       <div className="text-2xl font-semibold lg:text-3xl dark:text-zinc-100">
@@ -75,15 +95,21 @@ export default function Playground() {
 
 function InputCard(props: { filterProp: FormFilterProps; setFilterProp: any }) {
   const { filterProp, setFilterProp } = props
+  const defaultValues = useMemo(() => filterProp, [filterProp])
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<FormFilterProps>({
     resolver: zodResolver(FilterPropsSchema),
-    defaultValues: filterProp,
+    defaultValues,
   })
+
+  useEffect(() => {
+    reset(filterProp)
+  }, [filterProp, reset])
 
   const onSubmit = (data: FormFilterProps) => {
     setFilterProp(data)
