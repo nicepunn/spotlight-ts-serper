@@ -591,14 +591,14 @@ function OutputCard(props: {
             >
               Copy
             </Button>
-            <div className="h-full w-full sm:w-fit sm:min-w-40">
+            <div className="line-clamp-1 h-full w-full sm:w-fit sm:min-w-40">
               <ShortTextSelector
                 control={control}
                 label="Method"
                 list={methodList}
               />
             </div>
-            <div className="h-full w-full sm:w-fit sm:min-w-40">
+            <div className="line-clamp-1 h-full w-full sm:w-fit sm:min-w-40">
               <ShortTextSelector
                 control={control}
                 label="CodingLanguage"
@@ -860,16 +860,16 @@ function ShortTextSelector(props: {
         <Listbox value={field.value.name} onChange={field.onChange}>
           {({ open }) => (
             <>
-              <div className="relative w-full">
+              <div className="relative line-clamp-1 w-full">
                 <ListboxButton
                   className={classNames(
-                    'relative h-10 w-full cursor-default rounded-md bg-zinc-50 py-1.5 pl-3 pr-10 text-left text-base font-normal shadow-sm outline-offset-2 transition hover:bg-zinc-100 active:bg-zinc-100 active:transition-none disabled:cursor-not-allowed disabled:text-zinc-600 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 dark:active:bg-zinc-800/50 disabled:dark:text-zinc-400',
+                    'relative line-clamp-1 h-10 w-full cursor-default rounded-md bg-zinc-50 py-1.5 pl-3 pr-10 text-left text-base font-normal shadow-sm outline-offset-2 transition hover:bg-zinc-100 active:bg-zinc-100 active:transition-none disabled:cursor-not-allowed disabled:text-zinc-600 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 dark:active:bg-zinc-800/50 disabled:dark:text-zinc-400',
                     field.value === 'None'
                       ? 'text-zinc-300 active:text-zinc-600/40 dark:text-zinc-600'
                       : 'text-zinc-900 active:text-zinc-900/80 dark:text-zinc-100 dark:hover:text-zinc-50 dark:active:text-zinc-50/70',
                   )}
                 >
-                  <span className="flex items-center">
+                  <span className="line-clamp-1 flex items-center">
                     {field.value === 'None' ? 'Optional' : field.value}
                   </span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
