@@ -57,6 +57,13 @@ export const CodingLanguageSchema = z.object({
 
 export type CodingLanguage = z.infer<typeof CodingLanguageSchema>
 
+type IconType = React.ForwardRefExoticComponent<
+  Omit<React.SVGProps<SVGSVGElement>, 'ref'> & {
+    title?: string | undefined
+    titleId?: string | undefined
+  } & React.RefAttributes<SVGSVGElement>
+>
+
 export const TypeItemSchema = z.object({
   id: z.number(),
   name: z.enum([
@@ -154,7 +161,7 @@ export const FilterPropsSchema = z.object({
     'Shell',
     'Swift',
   ]),
-  Method: ListItemSchema,
+  Method: z.string(),
 })
 
 export type FormFilterProps = z.infer<typeof FilterPropsSchema>

@@ -48,59 +48,18 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import useStore from '../../zustand/store'
 
 export default function Playground() {
-  // const defaultFilterProps: FormFilterProps = {
-  //   Type: typeList[0],
-  //   Query: '',
-  //   Country: countryList[0].name,
-  //   Location: locationList[0].name,
-  //   Language: languageList[0].name,
-  //   DateRange: dateRangeList[0].name,
-  //   Autocorrect: true,
-  //   Results: resultList[0].name,
-  //   Page: 1,
-  //   MiniBatch: false,
-  //   CodingLanguage: codingLanguageList[0].name,
-  //   Method: methodList[0],
-  // }
-  // const [filterProp, setFilterProp] =
-  //   useState<FormFilterProps>(defaultFilterProps)
-
   const filterProp = useStore((state) => state.filterProps)
   const setFilterProp = useStore((state) => state.setFilterProps)
 
-  const [initLoading, setInitLoading] = useState(true)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setInitLoading(false)
-    }, 50) // Set the delay to 1 second
-
-    // Cleanup the timer on component unmount
-    return () => clearTimeout(timer)
-  }, [])
-  if (initLoading) {
-    return <></>
-  }
-  return (
-    <div className="flex w-full flex-col">
-      <div className="text-2xl font-semibold lg:text-3xl dark:text-zinc-100">
-        Playground
-      </div>
-      <div className="flex w-full flex-col gap-x-10 lg:flex-row">
-        <InputCard filterProp={filterProp} setFilterProp={setFilterProp} />
-        <OutputCard filterProp={filterProp} />
-      </div>
-    </div>
-  )
-}
-
-function InputCard(props: { filterProp: FormFilterProps; setFilterProp: any }) {
-  const { filterProp, setFilterProp } = props
-  const defaultValues = useMemo(() => filterProp, [filterProp])
+  const defaultValues: FormFilterProps = useMemo(() => filterProp, [filterProp])
+  const [tempFilterProp, setTempFilterProp] =
+    useState<FormFilterProps>(defaultValues)
   const {
     register,
     handleSubmit,
     control,
     reset,
+    watch,
     formState: { errors },
   } = useForm<FormFilterProps>({
     resolver: zodResolver(FilterPropsSchema),
@@ -111,10 +70,64 @@ function InputCard(props: { filterProp: FormFilterProps; setFilterProp: any }) {
     reset(filterProp)
   }, [filterProp, reset])
 
+  const formValues = watch()
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTempFilterProp(formValues)
+    }, 10)
+    return () => clearTimeout(timer)
+  }, [watch, formValues])
+
   const onSubmit = (data: FormFilterProps) => {
+    console.log(data)
     setFilterProp(data)
-    // console.log(data)
   }
+
+  const [initLoading, setInitLoading] = useState(true)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setInitLoading(false)
+    }, 30)
+    return () => clearTimeout(timer)
+  }, [])
+  if (initLoading) {
+    return <></>
+  }
+
+  return (
+    <div className="flex w-full flex-col">
+      <div className="text-2xl font-semibold lg:text-3xl dark:text-zinc-100">
+        Playground
+      </div>
+      <div className="flex w-full flex-col gap-x-10 lg:flex-row">
+        <InputCard
+          control={control}
+          handleSubmit={handleSubmit}
+          register={register}
+          errors={errors}
+          onSubmit={onSubmit}
+        />
+        <OutputCard
+          filterProp={filterProp}
+          tempFilterProp={tempFilterProp}
+          control={control}
+          handleSubmit={handleSubmit}
+          onSubmit={onSubmit}
+        />
+      </div>
+    </div>
+  )
+}
+
+function InputCard(props: {
+  register: any
+  handleSubmit: any
+  control: any
+  errors: any
+  onSubmit: any
+}) {
+  const { control, handleSubmit, register, errors, onSubmit } = props
 
   return (
     <div className="mt-12 flex h-fit w-full flex-col rounded-lg bg-zinc-100 px-6 py-5 shadow lg:mt-10 lg:w-[40vw] lg:min-w-[310px] dark:bg-zinc-900">
@@ -299,7 +312,14 @@ function InputCard(props: { filterProp: FormFilterProps; setFilterProp: any }) {
   )
 }
 
-function OutputCard(props: { filterProp: FormFilterProps }) {
+function OutputCard(props: {
+  filterProp: FormFilterProps
+  tempFilterProp: FormFilterProps
+  onSubmit: any
+  handleSubmit: any
+  control: any
+}) {
+  const { filterProp, tempFilterProp, handleSubmit, onSubmit, control } = props
   const defaultResult = `{
     "searchParameters": {
       "q": "apple inc",
@@ -493,10 +513,16 @@ function OutputCard(props: { filterProp: FormFilterProps }) {
   const defaultCode = `curl --location --request POST 'https://google.serper.dev/search' \\
   --header 'X-API-KEY: 2aa1f782fa840f29ef0629249d621449d7235651' \\
   --header 'Content-Type: application/json' \\
-  --data-raw '{"q":"apple inc"}'`
-  const [modeSelected, setModeSelect] = useState<'Results' | 'Code'>('Results')
+  --data-raw '{"q":""}'`
+  const [modeSelected, setModeSelect] = useState<'Results' | 'Code'>('Code')
   const [resultJsonData, setResultJsonData] = useState(defaultResult)
   const [code, setCode] = useState(defaultCode)
+  useEffect(() => {
+    setCode(`curl --location --request POST 'https://google.serper.dev/search' \\
+    --header 'X-API-KEY: 2aa1f782fa840f29ef0629249d621449d7235651' \\
+    --header 'Content-Type: application/json' \\
+    --data-raw '{"q":"${tempFilterProp.Query}"}'`)
+  }, [tempFilterProp])
   return (
     <nav className="mt-1 flex w-full flex-col overflow-auto bg-inherit">
       <div className="relative flex h-10 justify-between">
@@ -555,20 +581,31 @@ function OutputCard(props: { filterProp: FormFilterProps }) {
         </div>
       ) : (
         <div className="mt-4 flex min-h-48 w-full flex-col gap-y-4 overflow-auto rounded-lg bg-zinc-100 p-6 dark:bg-zinc-900">
-          <div className="flex h-10 w-full flex-row-reverse gap-x-2">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex h-10 w-full flex-row-reverse gap-x-2"
+          >
             <Button
               variant="secondary"
               className="h-full items-center gap-x-2 px-4"
             >
               Copy
             </Button>
-            {/* <div className="h-full min-w-40">
-              <ShortTextSelector control={control} label='Method' list={methodList} />
+            <div className="h-full min-w-40">
+              <ShortTextSelector
+                control={control}
+                label="Method"
+                list={methodList}
+              />
             </div>
             <div className="h-full min-w-40">
-              <ShortTextSelector control={control} label='CodingLanguage' list={codingLanguageList} />
-            </div> */}
-          </div>
+              <ShortTextSelector
+                control={control}
+                label="CodingLanguage"
+                list={codingLanguageList}
+              />
+            </div>
+          </form>
           {code === '' ? (
             <div className="flex h-full w-full items-center justify-center text-zinc-700">
               No query input
@@ -650,8 +687,8 @@ function TypeSelector(props: { control: any }) {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-zinc-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm dark:bg-zinc-900">
-                    {typeList.map((item) => (
+                  <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-zinc-200 py-1 text-base shadow-lg focus:outline-none sm:text-sm dark:bg-zinc-800">
+                    {typeList.map((item: TypeItem) => (
                       <ListboxOption
                         key={item.id}
                         className={({ focus }) =>
@@ -752,7 +789,7 @@ function LongTextSelector(props: { list: any[]; label: string; control: any }) {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-zinc-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm dark:bg-zinc-900">
+                  <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-zinc-200 py-1 text-base shadow-lg focus:outline-none sm:text-sm dark:bg-zinc-800">
                     {list.map((item: any) => (
                       <ListboxOption
                         key={item.id}
@@ -854,7 +891,7 @@ function ShortTextSelector(props: {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-[120px] w-full overflow-auto rounded-md bg-zinc-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm dark:bg-zinc-900">
+                  <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-[120px] w-full overflow-auto rounded-md bg-zinc-200 py-1 text-base shadow-lg focus:outline-none sm:text-sm dark:bg-zinc-800">
                     {list.map((item: any) => (
                       <ListboxOption
                         key={item.id}

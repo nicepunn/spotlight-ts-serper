@@ -19,7 +19,7 @@ const defaultFilterProps: FormFilterProps = {
   Page: 1,
   MiniBatch: false,
   CodingLanguage: 'C#',
-  Method: { id: 1, name: 'cURL', aka: 'cURL' },
+  Method: 'cURL',
 }
 
 interface MyState {
