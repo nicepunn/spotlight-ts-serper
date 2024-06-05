@@ -1,22 +1,7 @@
 'use client'
 /* eslint-disable @next/next/no-img-element */
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-} from '@headlessui/react'
-import {
-  ArrowDownLeftIcon,
-  Bars3Icon,
-  BellIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
 import { Button } from '@/components/Button'
-import { Dispatch, Fragment, SetStateAction, useState } from 'react'
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react'
 import {
   Label,
   Listbox,
@@ -42,72 +27,39 @@ import {
   ShoppingBagIcon,
   VideoCameraIcon,
 } from '@heroicons/react/20/solid'
-interface FilterProps {
-  Type:
-    | 'Search'
-    | 'Images'
-    | 'Videos'
-    | 'Places'
-    | 'Maps'
-    | 'News'
-    | 'Shopping'
-    | 'Scholar'
-    | 'Patents'
-    | 'Autocomplete'
-    | 'Webpage'
-  Query: string
-  Country: string
-  Location: string | null
-  Language: string
-  DateRange:
-    | 'Any time'
-    | 'Past hour'
-    | 'Past 24 hours'
-    | 'Past week'
-    | 'Past month'
-    | 'Past year'
-  Autocorrect: boolean
-  Results: 10 | 20 | 30 | 40 | 50 | 100
-  Page: number
-  MiniBatch: boolean
-  CodingLanguage:
-    | 'C#'
-    | 'cURL'
-    | 'Dart'
-    | 'Go'
-    | 'HTTP'
-    | 'Java'
-    | 'JavaScript'
-    | 'C'
-    | 'NodeJs'
-    | 'Objective-C'
-    | 'OCaml'
-    | 'PHP'
-    | 'PowerShell'
-    | 'Python'
-    | 'R'
-    | 'Ruby'
-    | 'Shell'
-    | 'Swift'
-  Method: string
-}
+import {
+  CodingLanguage,
+  DateRange,
+  FilterPropsSchema,
+  FormFilterProps,
+  ListItem,
+  Result,
+  TypeItem,
+} from '../../interfaces'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import useStore from '../../zustand/store'
 
 export default function Playground() {
-  const defaultFilterProps: FilterProps = {
-    Type: 'Search',
-    Query: 'OpenAI ChatGPT',
-    Country: 'United States',
-    Location: 'California',
-    Language: 'en',
-    DateRange: 'Past week',
-    Autocorrect: true,
-    Results: 20,
-    Page: 1,
-    MiniBatch: false,
-    CodingLanguage: 'JavaScript',
-    Method: 'GET',
-  }
-  const [filterProp, setFilterProp] = useState<FilterProps>(defaultFilterProps)
+  // const defaultFilterProps: FormFilterProps = {
+  //   Type: typeList[0],
+  //   Query: '',
+  //   Country: countryList[0].name,
+  //   Location: locationList[0].name,
+  //   Language: languageList[0].name,
+  //   DateRange: dateRangeList[0].name,
+  //   Autocorrect: true,
+  //   Results: resultList[0].name,
+  //   Page: 1,
+  //   MiniBatch: false,
+  //   CodingLanguage: codingLanguageList[0].name,
+  //   Method: methodList[0],
+  // }
+  // const [filterProp, setFilterProp] =
+  //   useState<FormFilterProps>(defaultFilterProps)
+
+  const filterProp = useStore((state) => state.filterProps)
+  const setFilterProp = useStore((state) => state.setFilterProps)
   return (
     <div className="flex w-full flex-col">
       <div className="text-2xl font-semibold lg:text-3xl dark:text-zinc-100">
@@ -121,14 +73,29 @@ export default function Playground() {
   )
 }
 
-function InputCard(props: {
-  filterProp: FilterProps
-  setFilterProp: Dispatch<SetStateAction<FilterProps>>
-}) {
-  const [enabled, setEnabled] = useState(false)
+function InputCard(props: { filterProp: FormFilterProps; setFilterProp: any }) {
+  const { filterProp, setFilterProp } = props
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<FormFilterProps>({
+    resolver: zodResolver(FilterPropsSchema),
+    defaultValues: filterProp,
+  })
+
+  const onSubmit = (data: FormFilterProps) => {
+    setFilterProp(data)
+    // console.log(data)
+  }
+
   return (
     <div className="mt-12 flex h-fit w-full flex-col rounded-lg bg-zinc-100 px-6 py-5 shadow lg:mt-10 lg:w-[40vw] lg:min-w-[310px] dark:bg-zinc-900">
-      <form className="flex w-full flex-col gap-y-[23px]">
+      <form
+        className="flex w-full flex-col gap-y-[23px]"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="flex w-full flex-col">
           <label
             htmlFor="Type"
@@ -137,7 +104,7 @@ function InputCard(props: {
             Type
           </label>
           <div className="mt-1 flex w-full flex-row gap-x-2">
-            <TypeSelector />
+            <TypeSelector control={control} />
             <Button
               type="submit"
               variant="primary"
@@ -156,12 +123,14 @@ function InputCard(props: {
           </label>
           <div className="mt-1">
             <input
+              {...register('Query')}
               id="Query"
               name="Query"
               type="text"
               required
               className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-zinc-100 px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
             />
+            {errors.Query && <span>{errors.Query.message}</span>}
           </div>
         </div>
 
@@ -173,7 +142,11 @@ function InputCard(props: {
             Country
           </label>
           <div className="mt-1">
-            <LongTextSelector list={countryList} />
+            <LongTextSelector
+              control={control}
+              label="Country"
+              list={countryList}
+            />
           </div>
         </div>
         <div>
@@ -184,7 +157,11 @@ function InputCard(props: {
             Location
           </label>
           <div className="mt-1">
-            <LongTextSelector list={locationList} />
+            <LongTextSelector
+              control={control}
+              label="Location"
+              list={locationList}
+            />
           </div>
         </div>
         <div>
@@ -195,7 +172,11 @@ function InputCard(props: {
             Language
           </label>
           <div className="mt-1">
-            <LongTextSelector list={languageList} />
+            <LongTextSelector
+              control={control}
+              label="Language"
+              list={languageList}
+            />
           </div>
         </div>
         <div className="flex w-full flex-row items-center gap-x-4">
@@ -207,7 +188,11 @@ function InputCard(props: {
               Date range
             </label>
             <div className="mt-1">
-              <ShortTextSelector list={dateRangeList} />
+              <ShortTextSelector
+                control={control}
+                label="DateRange"
+                list={dateRangeList}
+              />
             </div>
           </div>
           <div className="w-full">
@@ -219,6 +204,7 @@ function InputCard(props: {
             </label>
             <div className="mt-1">
               <input
+                {...register('Autocorrect')}
                 id="Autocorrect"
                 name="Autocorrect"
                 type="checkbox"
@@ -236,7 +222,11 @@ function InputCard(props: {
               Result
             </label>
             <div className="mt-1">
-              <ShortTextSelector list={resultList} />
+              <ShortTextSelector
+                control={control}
+                label="Results"
+                list={resultList}
+              />
             </div>
           </div>
           <div className="w-full">
@@ -248,12 +238,15 @@ function InputCard(props: {
             </label>
             <div className="mt-1">
               <input
+                {...register('Page', { valueAsNumber: true })}
+                min="0"
                 id="Page"
                 name="Page"
-                type="text"
+                type="number"
                 required
                 className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-zinc-100 px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
               />
+              {errors.Page && <span>{errors.Page.message}</span>}
             </div>
           </div>
         </div>
@@ -266,7 +259,13 @@ function InputCard(props: {
             Mini-batch (up to 100 queries)
           </label>
           <div className="mt-1">
-            <MySwitch enabled={enabled} setEnabled={setEnabled} />
+            <Controller
+              name="MiniBatch"
+              control={control}
+              render={({ field }) => (
+                <MySwitch enabled={field.value} setEnabled={field.onChange} />
+              )}
+            />
           </div>
         </div>
       </form>
@@ -274,7 +273,7 @@ function InputCard(props: {
   )
 }
 
-function OutputCard(props: { filterProp: FilterProps }) {
+function OutputCard(props: { filterProp: FormFilterProps }) {
   const defaultResult = `{
     "searchParameters": {
       "q": "apple inc",
@@ -537,12 +536,12 @@ function OutputCard(props: { filterProp: FilterProps }) {
             >
               Copy
             </Button>
-            <div className="h-full min-w-40">
-              <ShortTextSelector list={methodList} />
+            {/* <div className="h-full min-w-40">
+              <ShortTextSelector control={control} label='Method' list={methodList} />
             </div>
             <div className="h-full min-w-40">
-              <ShortTextSelector list={codingLanguageList} />
-            </div>
+              <ShortTextSelector control={control} label='CodingLanguage' list={codingLanguageList} />
+            </div> */}
           </div>
           {code === '' ? (
             <div className="flex h-full w-full items-center justify-center text-zinc-700">
@@ -589,273 +588,304 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
 
-function TypeSelector() {
-  const [selected, setSelected] = useState(typeList[0])
+function TypeSelector(props: { control: any }) {
+  const { control } = props
 
   return (
-    <Listbox value={selected} onChange={setSelected}>
-      {({ open }) => (
-        <>
-          <div className="relative w-full">
-            <ListboxButton className="relative h-10 w-full cursor-default rounded-md bg-zinc-50 py-1.5 pl-3 pr-10 text-left text-base font-normal text-zinc-900 shadow-sm outline-offset-2 transition hover:bg-zinc-100 active:bg-zinc-100 active:text-zinc-900/60 active:transition-none disabled:cursor-not-allowed disabled:text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:active:bg-zinc-800/50 dark:active:text-zinc-50/70 disabled:dark:text-zinc-400">
-              <span className="flex items-center">
-                <selected.icon
-                  className="h-5 w-5 shrink-0"
-                  aria-hidden="true"
-                />
-                <span className="ml-3 block truncate">
-                  {selected.id === 0 ? 'Optional' : selected.name}
-                </span>
-              </span>
-              <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                <ChevronDownIcon
-                  className="h-5 w-5 text-zinc-600 dark:text-zinc-400"
-                  aria-hidden="true"
-                />
-              </span>
-            </ListboxButton>
+    <Controller
+      name="Type"
+      control={control}
+      render={({ field }) => (
+        <Listbox value={field.value.name} onChange={field.onChange}>
+          {({ open }) => (
+            <>
+              <div className="relative w-full">
+                <ListboxButton className="relative h-10 w-full cursor-default rounded-md bg-zinc-50 py-1.5 pl-3 pr-10 text-left text-base font-normal text-zinc-900 shadow-sm outline-offset-2 transition hover:bg-zinc-100 active:bg-zinc-100 active:text-zinc-900/60 active:transition-none disabled:cursor-not-allowed disabled:text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:active:bg-zinc-800/50 dark:active:text-zinc-50/70 disabled:dark:text-zinc-400">
+                  <span className="flex items-center">
+                    {/* <field.value.icon
+                      className="h-5 w-5 shrink-0"
+                      aria-hidden="true"
+                    /> */}
+                    <span className="ml-3 block truncate">
+                      {field.value.id === 0 ? 'Optional' : field.value.name}
+                    </span>
+                  </span>
+                  <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                    <ChevronDownIcon
+                      className="h-5 w-5 text-zinc-600 dark:text-zinc-400"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </ListboxButton>
 
-            <Transition
-              show={open}
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-zinc-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm dark:bg-zinc-900">
-                {typeList.map((item) => (
-                  <ListboxOption
-                    key={item.id}
-                    className={({ focus }) =>
-                      classNames(
-                        focus
-                          ? 'bg-zinc-300 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300'
-                          : '',
-                        !focus ? 'text-zinc-600 dark:text-zinc-400' : '',
-                        'relative cursor-default select-none py-2 pl-3 pr-9',
-                      )
-                    }
-                    value={item}
-                  >
-                    {({ selected, focus }) => (
-                      <>
-                        <div className="flex items-center">
-                          <item.icon
-                            className="h-5 w-5 shrink-0"
-                            aria-hidden="true"
-                          />
-                          <span
-                            className={classNames(
-                              selected ? 'font-semibold' : 'font-normal',
-                              'ml-3 block truncate',
-                            )}
-                          >
-                            {item.name}
-                          </span>
-                        </div>
+                <Transition
+                  show={open}
+                  leave="transition ease-in duration-100"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-zinc-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm dark:bg-zinc-900">
+                    {typeList.map((item) => (
+                      <ListboxOption
+                        key={item.id}
+                        className={({ focus }) =>
+                          classNames(
+                            focus
+                              ? 'bg-zinc-300 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300'
+                              : '',
+                            !focus ? 'text-zinc-600 dark:text-zinc-400' : '',
+                            'relative cursor-default select-none py-2 pl-3 pr-9',
+                          )
+                        }
+                        value={item}
+                      >
+                        {({ selected, focus }) => (
+                          <>
+                            <div className="flex items-center">
+                              <item.icon
+                                className="h-5 w-5 shrink-0"
+                                aria-hidden="true"
+                              />
+                              <span
+                                className={classNames(
+                                  selected ? 'font-semibold' : 'font-normal',
+                                  'ml-3 block truncate',
+                                )}
+                              >
+                                {item.name}
+                              </span>
+                            </div>
 
-                        {selected ? (
-                          <span
-                            className={classNames(
-                              focus ? 'text-zinc-900' : 'text-zinc-900',
-                              'absolute inset-y-0 right-0 flex items-center pr-4',
-                            )}
-                          >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                        ) : null}
-                      </>
-                    )}
-                  </ListboxOption>
-                ))}
-              </ListboxOptions>
-            </Transition>
-          </div>
-        </>
+                            {selected ? (
+                              <span
+                                className={classNames(
+                                  focus ? 'text-zinc-900' : 'text-zinc-900',
+                                  'absolute inset-y-0 right-0 flex items-center pr-4',
+                                )}
+                              >
+                                <CheckIcon
+                                  className="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            ) : null}
+                          </>
+                        )}
+                      </ListboxOption>
+                    ))}
+                  </ListboxOptions>
+                </Transition>
+              </div>
+            </>
+          )}
+        </Listbox>
       )}
-    </Listbox>
+    />
   )
 }
 
-function LongTextSelector(props: { list: any[] }) {
-  const [selected, setSelected] = useState((props.list ?? [])[0])
+function LongTextSelector(props: { list: any[]; label: string; control: any }) {
+  const { label, list, control } = props
 
   return (
-    <Listbox value={selected} onChange={setSelected}>
-      {({ open }) => (
-        <>
-          <div className="relative w-full">
-            <ListboxButton
-              className={classNames(
-                'relative h-10 w-full cursor-default rounded-md bg-zinc-50 py-1.5 pl-3 pr-10 text-left text-base font-normal shadow-sm outline-offset-2 transition hover:bg-zinc-100 active:bg-zinc-100 active:transition-none disabled:cursor-not-allowed disabled:text-zinc-600 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 dark:active:bg-zinc-800/50 disabled:dark:text-zinc-400',
-                selected.id === 0
-                  ? 'text-zinc-300 active:text-zinc-600/40 dark:text-zinc-600'
-                  : 'text-zinc-900 active:text-zinc-900/80 dark:text-zinc-100 dark:hover:text-zinc-50 dark:active:text-zinc-50/70',
-              )}
-            >
-              <span className="flex items-center">
-                {selected.id === 0 ? 'Optional' : selected.name}
-              </span>
-              <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                <ChevronDownIcon
+    <Controller
+      name={label}
+      control={control}
+      render={({ field }) => (
+        <Listbox value={field.value.name} onChange={field.onChange}>
+          {({ open }) => (
+            <>
+              <div className="relative w-full">
+                <ListboxButton
                   className={classNames(
-                    'h-5 w-5 text-zinc-400',
-                    selected.id === 0
-                      ? 'text-zinc-900 dark:text-zinc-100'
-                      : 'text-zinc-900 dark:text-zinc-100',
+                    'relative h-10 w-full cursor-default rounded-md bg-zinc-50 py-1.5 pl-3 pr-10 text-left text-base font-normal shadow-sm outline-offset-2 transition hover:bg-zinc-100 active:bg-zinc-100 active:transition-none disabled:cursor-not-allowed disabled:text-zinc-600 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 dark:active:bg-zinc-800/50 disabled:dark:text-zinc-400',
+                    field.value === 'None'
+                      ? 'text-zinc-300 active:text-zinc-600/40 dark:text-zinc-600'
+                      : 'text-zinc-900 active:text-zinc-900/80 dark:text-zinc-100 dark:hover:text-zinc-50 dark:active:text-zinc-50/70',
                   )}
-                  aria-hidden="true"
-                />
-              </span>
-            </ListboxButton>
+                >
+                  <span className="flex items-center">
+                    {field.value === 'None' ? 'Optional' : field.value}
+                  </span>
+                  <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                    <ChevronDownIcon
+                      className={classNames(
+                        'h-5 w-5 text-zinc-400',
+                        field.value === 'None'
+                          ? 'text-zinc-900 dark:text-zinc-100'
+                          : 'text-zinc-900 dark:text-zinc-100',
+                      )}
+                      aria-hidden="true"
+                    />
+                  </span>
+                </ListboxButton>
 
-            <Transition
-              show={open}
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-zinc-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm dark:bg-zinc-900">
-                {props.list.map((item: any) => (
-                  <ListboxOption
-                    key={item.id}
-                    className={({ focus }) =>
-                      classNames(
-                        focus
-                          ? 'bg-zinc-300 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300'
-                          : '',
-                        !focus ? 'text-zinc-600 dark:text-zinc-400' : '',
-                        'relative cursor-default select-none py-2 pl-3 pr-9',
-                      )
-                    }
-                    value={item}
-                  >
-                    {({ selected, focus }) => (
-                      <>
-                        <div className="flex items-center">
-                          <span
-                            className={classNames(
-                              selected ? 'font-semibold' : 'font-normal',
-                              'ml-3 block truncate',
-                            )}
-                          >
-                            {item.name}
-                          </span>
-                        </div>
+                <Transition
+                  show={open}
+                  leave="transition ease-in duration-100"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-zinc-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm dark:bg-zinc-900">
+                    {list.map((item: any) => (
+                      <ListboxOption
+                        key={item.id}
+                        className={({ focus }) =>
+                          classNames(
+                            focus
+                              ? 'bg-zinc-300 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300'
+                              : '',
+                            !focus ? 'text-zinc-600 dark:text-zinc-400' : '',
+                            'relative cursor-default select-none py-2 pl-3 pr-9',
+                          )
+                        }
+                        value={item.name}
+                      >
+                        {({ selected, focus }) => (
+                          <>
+                            <div className="flex items-center">
+                              <span
+                                className={classNames(
+                                  selected ? 'font-semibold' : 'font-normal',
+                                  'ml-3 block truncate',
+                                )}
+                              >
+                                {item.name}
+                              </span>
+                            </div>
 
-                        {selected ? (
-                          <span
-                            className={classNames(
-                              focus ? 'text-zinc-900' : 'text-zinc-900',
-                              'absolute inset-y-0 right-0 flex items-center pr-4',
-                            )}
-                          >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                        ) : null}
-                      </>
-                    )}
-                  </ListboxOption>
-                ))}
-              </ListboxOptions>
-            </Transition>
-          </div>
-        </>
+                            {selected ? (
+                              <span
+                                className={classNames(
+                                  focus ? 'text-zinc-900' : 'text-zinc-900',
+                                  'absolute inset-y-0 right-0 flex items-center pr-4',
+                                )}
+                              >
+                                <CheckIcon
+                                  className="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            ) : null}
+                          </>
+                        )}
+                      </ListboxOption>
+                    ))}
+                  </ListboxOptions>
+                </Transition>
+              </div>
+            </>
+          )}
+        </Listbox>
       )}
-    </Listbox>
+    />
   )
 }
 
-function ShortTextSelector(props: { list: any[] }) {
-  const [selected, setSelected] = useState((props.list ?? [])[0])
+function ShortTextSelector(props: {
+  list: any[]
+  label: string
+  control: any
+}) {
+  const { label, list, control } = props
 
   return (
-    <Listbox value={selected} onChange={setSelected}>
-      {({ open }) => (
-        <>
-          <div className="relative w-full">
-            <ListboxButton
-              className={classNames(
-                'relative h-10 w-full cursor-default rounded-md bg-zinc-50 py-1.5 pl-3 pr-10 text-left text-base font-normal shadow-sm outline-offset-2 transition hover:bg-zinc-100 active:bg-zinc-100 active:transition-none disabled:cursor-not-allowed disabled:text-zinc-600 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 dark:active:bg-zinc-800/50 disabled:dark:text-zinc-400',
-                selected.id === 0
-                  ? 'text-zinc-300 active:text-zinc-600/40 dark:text-zinc-600'
-                  : 'text-zinc-900 active:text-zinc-900/80 dark:text-zinc-100 dark:hover:text-zinc-50 dark:active:text-zinc-50/70',
-              )}
-            >
-              <span className="flex items-center">
-                {selected.id === 0 ? 'Optional' : selected.name}
-              </span>
-              <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                <ChevronDownIcon
+    <Controller
+      name={label}
+      control={control}
+      render={({ field }) => (
+        <Listbox value={field.value.name} onChange={field.onChange}>
+          {({ open }) => (
+            <>
+              <div className="relative w-full">
+                <ListboxButton
                   className={classNames(
-                    'h-5 w-5 text-zinc-400',
-                    selected.id === 0
-                      ? 'text-zinc-900 dark:text-zinc-100'
-                      : 'text-zinc-900 dark:text-zinc-100',
+                    'relative h-10 w-full cursor-default rounded-md bg-zinc-50 py-1.5 pl-3 pr-10 text-left text-base font-normal shadow-sm outline-offset-2 transition hover:bg-zinc-100 active:bg-zinc-100 active:transition-none disabled:cursor-not-allowed disabled:text-zinc-600 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 dark:active:bg-zinc-800/50 disabled:dark:text-zinc-400',
+                    field.value === 'None'
+                      ? 'text-zinc-300 active:text-zinc-600/40 dark:text-zinc-600'
+                      : 'text-zinc-900 active:text-zinc-900/80 dark:text-zinc-100 dark:hover:text-zinc-50 dark:active:text-zinc-50/70',
                   )}
-                  aria-hidden="true"
-                />
-              </span>
-            </ListboxButton>
+                >
+                  <span className="flex items-center">
+                    {field.value === 'None' ? 'Optional' : field.value}
+                  </span>
+                  <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                    <ChevronDownIcon
+                      className={classNames(
+                        'h-5 w-5 text-zinc-400',
+                        field.value === 'None'
+                          ? 'text-zinc-900 dark:text-zinc-100'
+                          : 'text-zinc-900 dark:text-zinc-100',
+                      )}
+                      aria-hidden="true"
+                    />
+                  </span>
+                </ListboxButton>
 
-            <Transition
-              show={open}
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-[120px] w-full overflow-auto rounded-md bg-zinc-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm dark:bg-zinc-900">
-                {props.list.map((item: any) => (
-                  <ListboxOption
-                    key={item.id}
-                    className={({ focus }) =>
-                      classNames(
-                        focus
-                          ? 'bg-zinc-300 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300'
-                          : '',
-                        !focus ? 'text-zinc-600 dark:text-zinc-400' : '',
-                        'relative cursor-default select-none py-2 pl-3 pr-9',
-                      )
-                    }
-                    value={item}
-                  >
-                    {({ selected, focus }) => (
-                      <>
-                        <div className="flex items-center">
-                          <span
-                            className={classNames(
-                              selected ? 'font-semibold' : 'font-normal',
-                              'ml-3 block truncate',
-                            )}
-                          >
-                            {item.name}
-                          </span>
-                        </div>
+                <Transition
+                  show={open}
+                  leave="transition ease-in duration-100"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <ListboxOptions className="no-scrollbar absolute z-10 mt-1 max-h-[120px] w-full overflow-auto rounded-md bg-zinc-100 py-1 text-base shadow-lg focus:outline-none sm:text-sm dark:bg-zinc-900">
+                    {list.map((item: any) => (
+                      <ListboxOption
+                        key={item.id}
+                        className={({ focus }) =>
+                          classNames(
+                            focus
+                              ? 'bg-zinc-300 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300'
+                              : '',
+                            !focus ? 'text-zinc-600 dark:text-zinc-400' : '',
+                            'relative cursor-default select-none py-2 pl-3 pr-9',
+                          )
+                        }
+                        value={item.name}
+                      >
+                        {({ selected, focus }) => (
+                          <>
+                            <div className="flex items-center">
+                              <span
+                                className={classNames(
+                                  selected ? 'font-semibold' : 'font-normal',
+                                  'ml-3 block truncate',
+                                )}
+                              >
+                                {item.name}
+                              </span>
+                            </div>
 
-                        {selected ? (
-                          <span
-                            className={classNames(
-                              focus
-                                ? 'dark:text-zinc-900'
-                                : 'dark:text-zinc-900',
-                              'absolute inset-y-0 right-0 flex items-center pr-4',
-                            )}
-                          >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                        ) : null}
-                      </>
-                    )}
-                  </ListboxOption>
-                ))}
-              </ListboxOptions>
-            </Transition>
-          </div>
-        </>
+                            {selected ? (
+                              <span
+                                className={classNames(
+                                  focus
+                                    ? 'dark:text-zinc-900'
+                                    : 'dark:text-zinc-900',
+                                  'absolute inset-y-0 right-0 flex items-center pr-4',
+                                )}
+                              >
+                                <CheckIcon
+                                  className="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            ) : null}
+                          </>
+                        )}
+                      </ListboxOption>
+                    ))}
+                  </ListboxOptions>
+                </Transition>
+              </div>
+            </>
+          )}
+        </Listbox>
       )}
-    </Listbox>
+    />
   )
 }
-const typeList = [
+const typeList: TypeItem[] = [
   {
     id: 1,
     name: 'Search',
@@ -913,7 +943,7 @@ const typeList = [
   },
 ]
 
-const countryList = [
+const countryList: ListItem[] = [
   { id: 95, name: 'United States (us)', aka: 'US' },
   { id: 1, name: 'Afghanistan (af)', aka: 'AF' },
   { id: 2, name: 'Albania (al)', aka: 'AL' },
@@ -1011,7 +1041,7 @@ const countryList = [
   { id: 94, name: 'Lesotho (ls)', aka: 'LS' },
 ]
 
-const locationList = [
+const locationList: ListItem[] = [
   {
     id: 0,
     name: 'None',
@@ -1029,7 +1059,7 @@ const locationList = [
   },
 ]
 
-const languageList = [
+const languageList: ListItem[] = [
   { id: 95, name: 'English (en)', aka: 'EN' },
   { id: 1, name: 'Afghanistan (af)', aka: 'AF' },
   { id: 2, name: 'Albania (al)', aka: 'AL' },
@@ -1127,7 +1157,7 @@ const languageList = [
   { id: 94, name: 'Lesotho (ls)', aka: 'LS' },
 ]
 
-const dateRangeList = [
+const dateRangeList: DateRange[] = [
   { id: 1, name: 'Anytime', aka: '' },
   { id: 2, name: 'Past hour', aka: '' },
   { id: 3, name: 'Past 24 hours', aka: '' },
@@ -1136,16 +1166,16 @@ const dateRangeList = [
   { id: 6, name: 'Past year', aka: '' },
 ]
 
-const resultList = [
-  { id: 1, name: 10, aka: '' },
-  { id: 2, name: 20, aka: '' },
-  { id: 3, name: 30, aka: '' },
-  { id: 4, name: 40, aka: '' },
-  { id: 5, name: 50, aka: '' },
-  { id: 6, name: 100, aka: '' },
+const resultList: Result[] = [
+  { id: 1, name: '10', aka: '' },
+  { id: 2, name: '20', aka: '' },
+  { id: 3, name: '30', aka: '' },
+  { id: 4, name: '40', aka: '' },
+  { id: 5, name: '50', aka: '' },
+  { id: 6, name: '100', aka: '' },
 ]
 
-const codingLanguageList = [
+const codingLanguageList: CodingLanguage[] = [
   { id: 1, name: 'C#', aka: 'CSharp' },
   { id: 2, name: 'cURL', aka: 'cURL' },
   { id: 3, name: 'Dart', aka: 'Dart' },
@@ -1166,4 +1196,4 @@ const codingLanguageList = [
   { id: 18, name: 'Swift', aka: 'Swift' },
 ]
 
-const methodList = [{ id: 1, name: 'cURL', aka: 'cURL' }]
+const methodList: ListItem[] = [{ id: 1, name: 'cURL', aka: 'cURL' }]

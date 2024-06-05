@@ -114,7 +114,6 @@ function MyGraph() {
 }
 
 import { BarChart, Card, Divider, Switch } from '@tremor/react'
-import { useState } from 'react'
 
 const data = [
   {
