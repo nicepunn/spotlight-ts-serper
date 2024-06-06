@@ -493,7 +493,7 @@ export default function AuthLayout({
         </div>
       </div>
 
-      <div className="w-full lg:pl-[262px]">
+      <div className="w-full overflow-y-scroll lg:pl-[262px]">
         <div className="sticky top-0 z-40 flex h-[72px] shrink-0 flex-row-reverse items-center gap-x-4 border-b bg-zinc-100/[0.96] px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:hidden lg:px-8 dark:border-zinc-600 dark:bg-zinc-800">
           <button
             type="button"

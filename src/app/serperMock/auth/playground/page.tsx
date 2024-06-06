@@ -38,6 +38,7 @@ import {
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useStore from '../../zustand/store'
+import { convertToCurl } from '../libs/MyCURLConvert'
 
 export default function Playground() {
   const filterProp = useStore((state) => state.filterProps)
@@ -122,7 +123,7 @@ function InputCard(props: {
   const { control, handleSubmit, register, errors, onSubmit } = props
 
   return (
-    <div className="mt-12 flex h-fit w-full flex-col rounded-lg bg-zinc-100 px-6 py-5 shadow lg:mt-10 lg:w-[40vw] lg:min-w-[310px] dark:bg-zinc-900">
+    <div className="mt-12 flex h-fit w-full flex-col rounded-lg bg-zinc-100 p-4 shadow md:px-6 md:py-5 lg:mt-10 lg:w-[40vw] lg:min-w-[310px] dark:bg-zinc-900">
       <form
         className="flex w-full flex-col gap-y-[23px]"
         onSubmit={handleSubmit(onSubmit)}
@@ -161,7 +162,6 @@ function InputCard(props: {
               required
               className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-zinc-100 px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
             />
-            {errors.Query && <span>{errors.Query.message}</span>}
           </div>
         </div>
 
@@ -270,14 +270,13 @@ function InputCard(props: {
             <div className="mt-1">
               <input
                 {...register('Page', { valueAsNumber: true })}
-                min="0"
+                min="1"
                 id="Page"
                 name="Page"
                 type="number"
                 required
                 className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-zinc-100 px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
               />
-              {errors.Page && <span>{errors.Page.message}</span>}
             </div>
           </div>
         </div>
@@ -510,10 +509,7 @@ function OutputCard(props: {
   const [resultJsonData, setResultJsonData] = useState(defaultResult)
   const [code, setCode] = useState(defaultCode)
   useEffect(() => {
-    setCode(`curl --location --request POST 'https://google.serper.dev/search' \\
-    --header 'X-API-KEY: 2aa1f782fa840f29ef0629249d621449d7235651' \\
-    --header 'Content-Type: application/json' \\
-    --data-raw '{"q":"${tempFilterProp.Query}"}'`)
+    setCode(convertToCurl(tempFilterProp))
   }, [tempFilterProp])
   return (
     <nav className="mt-1 flex w-full flex-col overflow-auto bg-inherit">
@@ -554,7 +550,7 @@ function OutputCard(props: {
         </div>
       </div>
       {modeSelected === 'Results' ? (
-        <div className="mt-4 flex w-full flex-col gap-y-0 overflow-auto rounded-lg bg-zinc-100 p-6 dark:bg-zinc-900">
+        <div className="mt-4 flex w-full flex-col gap-y-0 overflow-auto rounded-lg bg-zinc-100 px-4 py-5 md:p-6 dark:bg-zinc-900">
           <div className="flex w-full flex-row-reverse">
             <Button
               variant="secondary"
@@ -572,7 +568,7 @@ function OutputCard(props: {
           </pre>
         </div>
       ) : (
-        <div className="mt-4 flex min-h-48 w-full flex-col gap-y-4 overflow-auto rounded-lg bg-zinc-100 p-6 dark:bg-zinc-900">
+        <div className="mt-4 flex min-h-48 w-full flex-col gap-y-4 overflow-auto rounded-lg bg-zinc-100 p-4 md:p-6 dark:bg-zinc-900">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex h-10 w-full flex-row-reverse gap-x-2"

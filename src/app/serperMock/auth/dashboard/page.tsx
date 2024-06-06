@@ -31,24 +31,24 @@ export default function Dashboard() {
           <div className="text-sm font-normal leading-4 text-zinc-800 dark:text-zinc-200">
             Requests last 30 days
           </div>
-          <div className="text-[36px]/[48px] font-semibold text-zinc-800 dark:text-zinc-200">
-            244
+          <div className="text-[30px]/[42px] font-semibold text-zinc-800 md:text-[36px]/[48px] md:font-semibold md:tracking-tight dark:text-zinc-200">
+            248
           </div>
         </div>
         <div className="flex h-[107px] w-full flex-col justify-between rounded-lg bg-zinc-100 px-4 py-5 md:h-full md:grow md:px-6 md:py-6 dark:bg-zinc-900">
           <div className="text-sm font-normal leading-4 text-zinc-800 dark:text-zinc-200">
             Requests last 24 hours
           </div>
-          <div className="text-[36px]/[48px] font-semibold text-zinc-800 dark:text-zinc-200">
-            +0
+          <div className="text-[30px]/[42px] font-semibold text-zinc-800 md:text-[36px]/[48px] md:font-semibold md:tracking-tight dark:text-zinc-200">
+            +3
           </div>
         </div>
         <div className="flex h-[107px] w-full flex-col justify-between rounded-lg bg-zinc-100 px-4 py-5 md:h-full md:grow md:px-6 md:py-6 dark:bg-zinc-900">
           <div className="text-sm font-normal leading-4 text-zinc-800 dark:text-zinc-200">
             Credits left
           </div>
-          <div className="text-[36px]/[48px] font-semibold text-zinc-800 dark:text-zinc-200">
-            348,977
+          <div className="text-[30px]/[42px] font-semibold text-zinc-800 md:text-[36px]/[48px] md:font-semibold md:tracking-tight dark:text-zinc-200">
+            348,973
           </div>
         </div>
       </div>

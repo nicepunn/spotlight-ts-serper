@@ -33,7 +33,7 @@ export default function Billing() {
 
 function PaymentDetailsCard() {
   return (
-    <div className="flex h-[384px] w-full flex-col rounded-lg bg-zinc-100 p-8 shadow md:max-w-[432px] dark:bg-zinc-900">
+    <div className="flex h-[384px] w-full flex-col overflow-visible rounded-lg bg-zinc-100 p-8 shadow md:max-w-[432px] dark:bg-zinc-900">
       <div className="text-2xl font-semibold dark:text-zinc-100">
         Payment details
       </div>
@@ -73,8 +73,10 @@ function PaymentDetailsCard() {
 function TopUpCard() {
   return (
     <div className="flex h-[384px] w-full flex-col rounded-lg bg-zinc-100 p-8 shadow md:max-w-[432px] dark:bg-zinc-900">
-      <div className="flex w-full flex-row items-center justify-between">
-        <div className="text-2xl font-semibold dark:text-zinc-100">Top up</div>
+      <div className="flex w-full flex-row items-center justify-between gap-x-6">
+        <div className="text-nowrap text-2xl font-semibold dark:text-zinc-100">
+          Top up
+        </div>
         <div className="line-clamp-1 text-base font-normal dark:text-zinc-100">
           Balance: 348,977 credits
         </div>

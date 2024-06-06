@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 export default function APIKey() {
   return (
-    <div className="flex w-full flex-col gap-y-16 sm:gap-y-12">
+    <div className="flex w-full flex-col gap-y-16 lg:gap-y-12">
       <div className="flex flex-col gap-y-[1.5px] lg:gap-y-1">
         <div className="text-2xl font-semibold lg:text-3xl dark:text-zinc-100">
           API key

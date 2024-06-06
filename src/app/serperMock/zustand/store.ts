@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 import { FormFilterProps } from '../interfaces'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
-const defaultFilterProps: FormFilterProps = {
+export const defaultFilterProps: FormFilterProps = {
   Type: {
     id: 1,
     name: 'Search',
@@ -15,10 +15,10 @@ const defaultFilterProps: FormFilterProps = {
   Language: 'English (en)',
   DateRange: 'Anytime',
   Autocorrect: true,
-  Results: '20',
+  Results: '10',
   Page: 1,
   MiniBatch: false,
-  CodingLanguage: 'C#',
+  CodingLanguage: 'cURL',
   Method: 'cURL',
 }
 
