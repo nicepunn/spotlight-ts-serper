@@ -2,7 +2,7 @@ import { FormFilterProps } from '../../interfaces'
 import { defaultFilterProps } from '../../zustand/store'
 import curlconverter from 'curlconverter'
 
-export const convertToCurl = (data: FormFilterProps) => {
+export const convertToCurl = (data: FormFilterProps, apiKey: string) => {
   const {
     Autocorrect,
     CodingLanguage,
@@ -17,8 +17,6 @@ export const convertToCurl = (data: FormFilterProps) => {
     Results,
     Type,
   } = data
-
-  const apiKey = '2aa1f782fa840f29ef0629249d621449d7235651'
   const dateRangeMapper: { [key: string]: string } = {
     'Past hour': 'h',
     'Past 24 hours': 'd',

@@ -37,12 +37,12 @@ import {
 } from '../../interfaces'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import useStore from '../../zustand/store'
+import { useApiKeyStore, useFilterStore } from '../../zustand/store'
 import { convertToCurl } from '../libs/MyCURLConvert'
 
 export default function Playground() {
-  const filterProp = useStore((state) => state.filterProps)
-  const setFilterProp = useStore((state) => state.setFilterProps)
+  const filterProp = useFilterStore((state) => state.filterProps)
+  const setFilterProp = useFilterStore((state) => state.setFilterProps)
 
   const defaultValues: FormFilterProps = useMemo(() => filterProp, [filterProp])
   const [tempFilterProp, setTempFilterProp] =
@@ -311,6 +311,7 @@ function OutputCard(props: {
   control: any
 }) {
   const { filterProp, tempFilterProp, handleSubmit, onSubmit, control } = props
+  const apiKey = useApiKeyStore((state) => state.apiKey)
   const defaultResult = `{
     "searchParameters": {
       "q": "apple inc",
@@ -501,16 +502,12 @@ function OutputCard(props: {
       }
     ]
   }`
-  const defaultCode = `curl --location --request POST 'https://google.serper.dev/search' \\
-  --header 'X-API-KEY: 2aa1f782fa840f29ef0629249d621449d7235651' \\
-  --header 'Content-Type: application/json' \\
-  --data-raw '{"q":""}'`
   const [modeSelected, setModeSelect] = useState<'Results' | 'Code'>('Code')
   const [resultJsonData, setResultJsonData] = useState(defaultResult)
-  const [code, setCode] = useState(defaultCode)
+  const [code, setCode] = useState('')
   useEffect(() => {
-    setCode(convertToCurl(tempFilterProp))
-  }, [tempFilterProp])
+    setCode(convertToCurl(tempFilterProp, apiKey))
+  }, [tempFilterProp, apiKey])
   return (
     <nav className="mt-1 flex w-full flex-col overflow-auto bg-inherit">
       <div className="relative flex h-10 justify-between">

@@ -22,12 +22,17 @@ export const defaultFilterProps: FormFilterProps = {
   Method: 'cURL',
 }
 
-interface MyState {
+interface FilterState {
   filterProps: FormFilterProps
   setFilterProps: (props: FormFilterProps) => void
 }
 
-const useStore = create<MyState>()(
+interface ApiKey {
+  apiKey: string
+  setApiKey: (props: string) => void
+}
+
+export const useFilterStore = create<FilterState>()(
   persist(
     (set) => ({
       filterProps: defaultFilterProps,
@@ -39,4 +44,14 @@ const useStore = create<MyState>()(
   ),
 )
 
-export default useStore
+export const useApiKeyStore = create<ApiKey>()(
+  persist(
+    (set) => ({
+      apiKey: '2aa1f782fa840f29ef0629249d621449d7235651',
+      setApiKey: (props) => set({ apiKey: props }),
+    }),
+    {
+      name: 'filter-props', // name of the item in storage
+    },
+  ),
+)

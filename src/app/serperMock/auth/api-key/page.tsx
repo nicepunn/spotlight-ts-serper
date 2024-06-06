@@ -20,10 +20,11 @@ export default function APIKey() {
 }
 
 function MyCard() {
+  const [copyState, setCopyState] = useState<'Copy' | 'Copied'>('Copy')
   const [isKeyVisible, setKeyVisible] = useState(false)
   return (
     <div className="h-[320px] w-full max-w-[448px] rounded-lg bg-zinc-100 shadow dark:bg-zinc-900">
-      <form className="p-8">
+      <div className="p-8">
         <div className="flex w-full flex-col gap-y-4">
           <div className="flex w-full flex-row gap-x-2">
             <label htmlFor="email" className="sr-only">
@@ -50,15 +51,24 @@ function MyCard() {
                 />
               )}
             </div>
-            <Button className="px-4" variant="secondary">
-              Copy
+            <Button
+              onClick={() => {
+                setCopyState('Copied')
+                const timer = setTimeout(() => {
+                  setCopyState('Copy')
+                }, 2000)
+              }}
+              className="px-4"
+              variant="secondary"
+            >
+              {copyState}
             </Button>
           </div>
           <Button className="w-fit px-4" variant="primary">
             Reset key
           </Button>
         </div>
-      </form>
+      </div>
     </div>
   )
 }
