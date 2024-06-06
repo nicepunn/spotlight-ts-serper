@@ -1,16 +1,8 @@
 'use client'
 /* eslint-disable @next/next/no-img-element */
 import { Button } from '@/components/Button'
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
 import {
-  Dispatch,
-  Fragment,
-  SetStateAction,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
-import {
-  Label,
   Listbox,
   ListboxButton,
   ListboxOption,
@@ -591,14 +583,14 @@ function OutputCard(props: {
             >
               Copy
             </Button>
-            <div className="h-full w-full sm:w-fit sm:min-w-40">
+            <div className="h-full w-full sm:w-fit sm:min-w-40 lg:w-full lg:min-w-0 lg:max-w-40">
               <ShortTextSelector
                 control={control}
                 label="Method"
                 list={methodList}
               />
             </div>
-            <div className="h-full w-full sm:w-fit sm:min-w-40">
+            <div className="h-full w-full sm:w-fit sm:min-w-40 lg:w-full lg:min-w-0 lg:max-w-40">
               <ShortTextSelector
                 control={control}
                 label="CodingLanguage"
@@ -654,6 +646,12 @@ function classNames(...classes: any) {
 function TypeSelector(props: { control: any }) {
   const { control } = props
 
+  const getIconComponent = (name: string) => {
+    const item = typeList.find((type) => type.name === name)
+    return item ? (
+      <item.icon className="h-5 w-5 shrink-0" aria-hidden="true" />
+    ) : null
+  }
   return (
     <Controller
       name="Type"
@@ -665,10 +663,7 @@ function TypeSelector(props: { control: any }) {
               <div className="relative w-full">
                 <ListboxButton className="relative h-10 w-full cursor-default rounded-md bg-zinc-50 py-1.5 pl-3 pr-10 text-left text-base font-normal text-zinc-900 shadow-sm outline-offset-2 transition hover:bg-zinc-100 active:bg-zinc-100 active:text-zinc-900/60 active:transition-none disabled:cursor-not-allowed disabled:text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:active:bg-zinc-800/50 dark:active:text-zinc-50/70 disabled:dark:text-zinc-400">
                   <span className="flex items-center">
-                    {/* <field.value.icon
-                      className="h-5 w-5 shrink-0"
-                      aria-hidden="true"
-                    /> */}
+                    {getIconComponent(field.value.name)}
                     <span className="ml-3 block truncate">
                       {field.value.id === 0 ? 'Optional' : field.value.name}
                     </span>

@@ -20,6 +20,28 @@
   .recharts-text {
     color: white;
   }
+
+  .recharts-layer {
+    color: white;
+  }
+}
+
+@layer base {
+  .recharts-text {
+    color: white;
+  }
+  .recharts-layer {
+    color: white;
+  }
+}
+
+@layer components {
+  .recharts-text {
+    color: white;
+  }
+  .recharts-layer {
+    color: white;
+  }
 }
 
 pre .json-key {

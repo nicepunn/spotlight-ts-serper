@@ -197,10 +197,18 @@ function MyBarChart() {
         data={data}
         index="date"
         categories={['This Year']}
-        colors={['blue']}
+        colors={['zinc-950']}
         valueFormatter={valueFormatter}
         yAxisWidth={45}
-        className="h-[360px] sm:block"
+        className="h-[360px] text-zinc-100 sm:block"
+        showAnimation
+        showLegend={false}
+        // barColor="#4caf50" // Customize the bar color
+        // barOpacity={0.8} // Customize the bar opacity
+        // axisColor="#333" // Customize the axis color
+        // axisLineColor="#ccc" // Customize the axis line color
+        // axisLabelColor="#333" // Customize the axis label color
+        // gridColor="#e0e0e0" // Customize the grid color
       />
     </div>
   )
