@@ -127,7 +127,7 @@ export const FilterPropsSchema = z.object({
   Type: TypeItemSchema,
   Query: z.string(),
   Country: z.string(),
-  Location: z.string().nullable(),
+  Location: z.string(),
   Language: z.string(),
   DateRange: z.enum([
     'Anytime',
