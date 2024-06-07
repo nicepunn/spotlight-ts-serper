@@ -38,8 +38,14 @@ import {
 } from '../../interfaces'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useApiKeyStore, useFilterStore } from '../../zustand/store'
+import {
+  useApiKeyStore,
+  useFilterStore,
+  useResultStore,
+} from '../../zustand/store'
 import { convertToCurl } from '../libs/MyCURLConvert'
+import { fetchFromCurl } from '../libs/MyResultConverter'
+import { init } from 'next/dist/compiled/webpack/webpack'
 
 export default function Playground() {
   const filterProp = useFilterStore((state) => state.filterProps)
@@ -74,7 +80,7 @@ export default function Playground() {
   }, [watch, formValues])
 
   const onSubmit = (data: FormFilterProps) => {
-    console.log(data)
+    // console.log(data)
     setFilterProp(data)
   }
 
@@ -243,7 +249,6 @@ function InputCard(props: {
                     name="PlaceID"
                     type="text"
                     placeholder="Optional"
-                    required
                     className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-zinc-100 px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-base placeholder:font-normal placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
                   />
                 </div>
@@ -267,7 +272,6 @@ function InputCard(props: {
                     name="CID"
                     type="text"
                     placeholder="Optional"
-                    required
                     className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-zinc-100 px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-base placeholder:font-normal placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
                   />
                 </div>
@@ -465,7 +469,7 @@ function OutputCard(props: {
 }) {
   const { filterProp, tempFilterProp, handleSubmit, onSubmit, control } = props
   const apiKey = useApiKeyStore((state) => state.apiKey)
-  const defaultResult = `{
+  const defaultResult = `[{
     "searchParameters": {
       "q": "apple inc",
       "gl": "us",
@@ -654,19 +658,68 @@ function OutputCard(props: {
         "query": "Apple Inc Bloomberg"
       }
     ]
-  }`
+}]`
   const [modeSelected, setModeSelect] = useState<'Results' | 'Code'>('Code')
-  const [resultJsonData, setResultJsonData] = useState(defaultResult)
+  const resultJsonData = useResultStore((state) => state.result)
+  const setResultJsonData = useResultStore((state) => state.setResult)
+  // const [resultJsonData, setResultJsonData] = useState('')
   const [code, setCode] = useState('')
   const [copyState, setCopyState] = useState<'Copy' | 'Copied'>('Copy')
   useEffect(() => {
     setCode(convertToCurl(tempFilterProp, apiKey))
   }, [tempFilterProp, apiKey])
+
+  const fetchResult = async (init?: 'init') => {
+    const validCurlExample = `curl --location --request POST 'https://google.serper.dev/videos' \\
+--header 'X-API-KEY: 2aa1f782fa840f29ef0629249d621449d7235651' \\
+--header 'Content-Type: application/json' \\
+--data-raw '[{"q":"apple","location":"United Kingdom","gl":"al","hl":"ak","num":20,"autocorrect":false,"tbs":"qdr:w","page":2}]'`
+    try {
+      const rawResult = await fetchFromCurl(
+        init === 'init' ? convertToCurl(filterProp, apiKey) : code,
+      )
+      console.log(rawResult)
+      const result = JSON.stringify(rawResult)
+
+      setResultJsonData(result)
+    } catch (error) {
+      setResultJsonData('Invalid JSON format in headers or body.')
+      console.error('Error: ', error)
+      ;('')
+    }
+  }
+
+  useEffect(() => {
+    fetchResult()
+    // console.log(code)
+  }, [filterProp])
+
+  useEffect(() => {
+    fetchResult('init')
+  }, [])
+
+  // window.onload = function () {
+  //   var element = document.getElementById('json')
+  //   var obj = JSON.parse(element.innerText)
+  //   element.innerHTML = JSON.stringify(obj, undefined, 2)
+  // }
+
+  const element = document.getElementById('json') as HTMLElement
+  if (element) {
+    try {
+      const obj = JSON.parse(element.innerText)
+      element.innerHTML = JSON.stringify(obj, undefined, 2)
+    } catch (e) {
+      console.error('Error parsing JSON:', e)
+    }
+  } else {
+    console.error("Element with id 'json' not found")
+  }
+
   return (
     <nav className="mt-1 flex w-full flex-col overflow-auto bg-inherit">
       <div className="relative flex h-10 justify-between">
         <div className="flex w-full flex-row justify-between border-b-[1.5px] dark:border-zinc-500">
-          {/* Current: "border-indigo-500 text-zinc-100", Default: "border-transparent text-zinc-500 hover:border-zinc-700 hover:text-zinc-300" */}
           <div className="flex flex-row">
             <button
               type="button"

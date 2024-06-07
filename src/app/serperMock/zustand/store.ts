@@ -36,6 +36,11 @@ interface ApiKey {
   setApiKey: (props: string) => void
 }
 
+interface Result {
+  result: string
+  setResult: (props: string) => void
+}
+
 export const useFilterStore = create<FilterState>()(
   persist(
     (set) => ({
@@ -55,7 +60,19 @@ export const useApiKeyStore = create<ApiKey>()(
       setApiKey: (props) => set({ apiKey: props }),
     }),
     {
-      name: 'filter-props', // name of the item in storage
+      name: 'apiKey', // name of the item in storage
+    },
+  ),
+)
+
+export const useResultStore = create<Result>()(
+  persist(
+    (set) => ({
+      result: '',
+      setResult: (newResult) => set({ result: newResult }),
+    }),
+    {
+      name: 'Result', // name of the item in storage
     },
   ),
 )
