@@ -712,7 +712,7 @@ function OutputCard(props: {
         console.error("Element with id 'json' not found")
       }
     }
-  }, [modeSelected])
+  }, [modeSelected, fetchResult])
 
   const downloadJSON = () => {
     const blob = new Blob([resultJsonData], { type: 'application/json' })
