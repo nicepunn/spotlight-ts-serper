@@ -698,12 +698,6 @@ function OutputCard(props: {
     fetchResult('init')
   }, [])
 
-  // window.onload = function () {
-  //   var element = document.getElementById('json')
-  //   var obj = JSON.parse(element.innerText)
-  //   element.innerHTML = JSON.stringify(obj, undefined, 2)
-  // }
-
   const element = document.getElementById('json') as HTMLElement
   if (element) {
     try {
@@ -714,6 +708,18 @@ function OutputCard(props: {
     }
   } else {
     console.error("Element with id 'json' not found")
+  }
+
+  const downloadJSON = () => {
+    const blob = new Blob([resultJsonData], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'data.json'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url) // Clean up the URL object
   }
 
   return (
@@ -757,6 +763,9 @@ function OutputCard(props: {
         <div className="mt-4 flex w-full flex-col gap-y-0 overflow-auto rounded-lg bg-zinc-100 px-4 py-5 md:p-6 dark:bg-zinc-900">
           <div className="flex w-full flex-row-reverse">
             <Button
+              onClick={() => {
+                downloadJSON()
+              }}
               variant="secondary"
               className="h-9 items-center gap-x-2 pl-3 pr-4"
             >
