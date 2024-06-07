@@ -658,7 +658,7 @@ function MyTable() {
                 }}
                 disabled={showRequests.length < limitReq}
                 variant="secondary"
-                className="box-border border border-inherit px-4 disabled:cursor-not-allowed disabled:border-zinc-200 disabled:bg-inherit disabled:text-zinc-300 disabled:hover:border disabled:hover:border-zinc-200 disabled:hover:bg-inherit disabled:hover:text-zinc-300 dark:disabled:border-zinc-800 dark:disabled:text-zinc-700 dark:disabled:hover:border-zinc-800 dark:disabled:hover:text-zinc-700"
+                className="box-border border border-inherit px-4"
               >
                 Next
               </Button>
@@ -668,7 +668,7 @@ function MyTable() {
                 }}
                 disabled={page <= 1}
                 variant="secondary"
-                className="box-border border border-inherit px-4 disabled:cursor-not-allowed disabled:border-zinc-200 disabled:bg-inherit disabled:text-zinc-300 disabled:hover:border disabled:hover:border-zinc-200 disabled:hover:bg-inherit disabled:hover:text-zinc-300 dark:disabled:border-zinc-800 dark:disabled:text-zinc-700 dark:disabled:hover:border-zinc-800 dark:disabled:hover:text-zinc-700"
+                className="box-border border border-inherit px-4 "
               >
                 Previous
               </Button>

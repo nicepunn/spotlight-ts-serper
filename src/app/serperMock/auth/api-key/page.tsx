@@ -89,7 +89,11 @@ function MyCard() {
   )
 }
 
-function CopyButton(props: { watch: any; copyState: any; setCopyState: any }) {
+function CopyButton(props: {
+  watch: any
+  copyState: 'Copy' | 'Copied'
+  setCopyState: any
+}) {
   const cutFirstAndLastLetter = (str: string) => {
     if (str.length <= 2) {
       return ''
@@ -113,9 +117,10 @@ function CopyButton(props: { watch: any; copyState: any; setCopyState: any }) {
 
   return (
     <Button
+      disabled={copyState === 'Copied'}
       type="button"
       onClick={handleCopy}
-      className="px-4"
+      className="box-border border border-zinc-100 px-4 dark:border-zinc-900"
       variant="secondary"
     >
       {copyState}

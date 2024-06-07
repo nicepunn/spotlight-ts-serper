@@ -21,7 +21,7 @@ export function Button({
   ...props
 }: ButtonProps) {
   className = clsx(
-    'inline-flex items-center gap-2 justify-center rounded-md py-2 px-3 text-sm outline-offset-2 shadow-sm transition active:transition-none',
+    'disabled:cursor-not-allowed disabled:border-zinc-200 disabled:bg-inherit disabled:text-zinc-300 disabled:hover:border disabled:hover:border-zinc-200 disabled:hover:bg-inherit disabled:hover:text-zinc-300 dark:disabled:border-zinc-800 dark:disabled:text-zinc-700 dark:disabled:hover:border-zinc-800 dark:disabled:hover:text-zinc-700 disabled:cursor-not-allowed inline-flex items-center gap-2 justify-center rounded-md py-2 px-3 text-sm outline-offset-2 shadow-sm transition active:transition-none',
     variantStyles[variant],
     className,
   )

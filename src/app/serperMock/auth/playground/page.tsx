@@ -505,6 +505,7 @@ function OutputCard(props: {
   const [modeSelected, setModeSelect] = useState<'Results' | 'Code'>('Code')
   const [resultJsonData, setResultJsonData] = useState(defaultResult)
   const [code, setCode] = useState('')
+  const [copyState, setCopyState] = useState<'Copy' | 'Copied'>('Copy')
   useEffect(() => {
     setCode(convertToCurl(tempFilterProp, apiKey))
   }, [tempFilterProp, apiKey])
@@ -571,10 +572,19 @@ function OutputCard(props: {
             className="flex h-10 w-full flex-row-reverse gap-x-2"
           >
             <Button
+              disabled={copyState === 'Copied'}
               variant="secondary"
-              className="h-full items-center gap-x-2 px-4"
+              className="box-border h-full items-center gap-x-2 border border-zinc-100 px-4 dark:border-zinc-900"
+              onClick={() => {
+                navigator.clipboard.writeText(code).then(() => {
+                  setCopyState('Copied')
+                  setTimeout(() => {
+                    setCopyState('Copy')
+                  }, 2000)
+                })
+              }}
             >
-              Copy
+              {copyState}
             </Button>
             <div className="h-full w-full sm:w-fit sm:min-w-40 lg:w-full lg:min-w-0 lg:max-w-40">
               <ShortTextSelector
