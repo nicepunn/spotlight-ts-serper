@@ -698,17 +698,21 @@ function OutputCard(props: {
     fetchResult('init')
   }, [])
 
-  const element = document.getElementById('json') as HTMLElement
-  if (element && modeSelected === 'Results') {
-    try {
-      const obj = JSON.parse(element.innerText)
-      element.innerHTML = JSON.stringify(obj, undefined, 2)
-    } catch (e) {
-      console.error('Error parsing JSON:', e)
+  useEffect(() => {
+    if (modeSelected === 'Results') {
+      const element = document.getElementById('json') as HTMLElement
+      if (element) {
+        try {
+          const obj = JSON.parse(element.innerText)
+          element.innerHTML = JSON.stringify(obj, undefined, 2)
+        } catch (e) {
+          console.error('Error parsing JSON:', e)
+        }
+      } else {
+        console.error("Element with id 'json' not found")
+      }
     }
-  } else {
-    console.error("Element with id 'json' not found")
-  }
+  }, [modeSelected])
 
   const downloadJSON = () => {
     const blob = new Blob([resultJsonData], { type: 'application/json' })
