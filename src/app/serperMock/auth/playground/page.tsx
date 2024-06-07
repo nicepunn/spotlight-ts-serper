@@ -699,7 +699,7 @@ function OutputCard(props: {
   }, [])
 
   const element = document.getElementById('json') as HTMLElement
-  if (element) {
+  if (element && modeSelected === 'Results') {
     try {
       const obj = JSON.parse(element.innerText)
       element.innerHTML = JSON.stringify(obj, undefined, 2)
