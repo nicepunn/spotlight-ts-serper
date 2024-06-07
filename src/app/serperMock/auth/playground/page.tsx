@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 /* eslint-disable @next/next/no-img-element */
 import { Button } from '@/components/Button'
@@ -460,6 +461,8 @@ function InputCard(props: {
   )
 }
 
+import { useRef } from 'react'
+
 function OutputCard(props: {
   filterProp: FormFilterProps
   tempFilterProp: FormFilterProps
@@ -689,14 +692,23 @@ function OutputCard(props: {
     }
   }
 
-  useEffect(() => {
-    fetchResult()
-    // console.log(code)
-  }, [filterProp])
+  const useIsMount = () => {
+    const isMountRef = useRef(true)
+    useEffect(() => {
+      isMountRef.current = false
+    }, [])
+    return isMountRef.current
+  }
+  const isMount = useIsMount()
 
   useEffect(() => {
-    fetchResult('init')
-  }, [])
+    if (isMount) {
+      fetchResult('init')
+    } else {
+      fetchResult()
+      setModeSelect('Results')
+    }
+  }, [filterProp])
 
   useEffect(() => {
     if (modeSelected === 'Results') {
@@ -791,6 +803,7 @@ function OutputCard(props: {
             className="flex h-10 w-full flex-row-reverse gap-x-2"
           >
             <Button
+              type="button"
               disabled={copyState === 'Copied'}
               variant="secondary"
               className="box-border h-full items-center gap-x-2 border border-zinc-100 px-4 dark:border-zinc-900"
