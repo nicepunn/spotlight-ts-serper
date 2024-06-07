@@ -162,6 +162,10 @@ export const FilterPropsSchema = z.object({
     'Swift',
   ]),
   Method: z.string(),
+  GPSPosition: z.string(),
+  PlaceID: z.string(),
+  CID: z.string(),
+  URL: z.string(),
 })
 
 export type FormFilterProps = z.infer<typeof FilterPropsSchema>

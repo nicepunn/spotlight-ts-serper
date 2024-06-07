@@ -17,6 +17,7 @@ import {
   ChevronDownIcon,
   DocumentTextIcon,
   GlobeAltIcon,
+  InformationCircleIcon,
   MagnifyingGlassIcon,
   MapIcon,
   MapPinIcon,
@@ -95,6 +96,7 @@ export default function Playground() {
       </div>
       <div className="flex w-full flex-col gap-x-10 lg:flex-row">
         <InputCard
+          tempFilterprop={tempFilterProp}
           control={control}
           handleSubmit={handleSubmit}
           register={register}
@@ -114,13 +116,15 @@ export default function Playground() {
 }
 
 function InputCard(props: {
+  tempFilterprop: FormFilterProps
   register: any
   handleSubmit: any
   control: any
   errors: any
   onSubmit: any
 }) {
-  const { control, handleSubmit, register, errors, onSubmit } = props
+  const { control, handleSubmit, register, errors, onSubmit, tempFilterprop } =
+    props
 
   return (
     <div className="mt-12 flex h-fit w-full flex-col rounded-lg bg-zinc-100 p-4 shadow md:px-6 md:py-5 lg:mt-10 lg:w-[40vw] lg:min-w-[310px] dark:bg-zinc-900">
@@ -142,162 +146,311 @@ function InputCard(props: {
               variant="primary"
               className="h-10 w-fit flex-none px-4"
             >
-              Search
+              {tempFilterprop.Type.name === 'Webpage' ? 'Scrape' : 'Search'}
             </Button>
           </div>
-        </div>
-        <div>
-          <label
-            htmlFor="Query"
-            className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
-          >
-            Query
-          </label>
-          <div className="mt-1">
-            <input
-              {...register('Query')}
-              id="Query"
-              name="Query"
-              type="text"
-              required
-              className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-zinc-100 px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
-            />
-          </div>
+          {tempFilterprop.Type.name !== 'Webpage' ? (
+            <></>
+          ) : (
+            <div className="mt-4 flex w-full flex-row gap-x-3 rounded-lg bg-zinc-300 p-3 dark:bg-zinc-700">
+              <div className="flex flex-col justify-center">
+                <InformationCircleIcon className="h-6 w-6" area-hidden="true" />
+              </div>
+              <div className="text-sm font-normal leading-[21px] text-zinc-950 dark:text-zinc-50">
+                This feature is in beta and subject to change. If you plan to
+                use it in production, please contact us.
+              </div>
+            </div>
+          )}
         </div>
 
-        <div>
-          <label
-            htmlFor="Country"
-            className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
-          >
-            Country
-          </label>
-          <div className="mt-1">
-            <LongTextSelector
-              control={control}
-              label="Country"
-              list={countryList}
-            />
-          </div>
-        </div>
-        <div>
-          <label
-            htmlFor="Location"
-            className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
-          >
-            Location
-          </label>
-          <div className="mt-1">
-            <LongTextSelector
-              control={control}
-              label="Location"
-              list={locationList}
-            />
-          </div>
-        </div>
-        <div>
-          <label
-            htmlFor="Language"
-            className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
-          >
-            Language
-          </label>
-          <div className="mt-1">
-            <LongTextSelector
-              control={control}
-              label="Language"
-              list={languageList}
-            />
-          </div>
-        </div>
-        <div className="flex w-full flex-row items-center gap-x-4">
-          <div className="w-full">
+        {tempFilterprop.Type.name === 'Webpage' ? (
+          <div>
             <label
-              htmlFor="DateRange"
+              htmlFor="URL"
               className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
             >
-              Date range
-            </label>
-            <div className="mt-1">
-              <ShortTextSelector
-                control={control}
-                label="DateRange"
-                list={dateRangeList}
-              />
-            </div>
-          </div>
-          <div className="w-full">
-            <label
-              htmlFor="Autocorrect"
-              className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
-            >
-              Autocorrect
+              URL
             </label>
             <div className="mt-1">
               <input
-                {...register('Autocorrect')}
-                id="Autocorrect"
-                name="Autocorrect"
-                type="checkbox"
-                className="h-4 w-4 rounded border-zinc-700 text-zinc-800 accent-zinc-800 focus:ring-zinc-800 dark:text-zinc-100 dark:accent-zinc-100 dark:focus:ring-zinc-100"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="flex w-full flex-row items-center gap-x-4">
-          <div className="w-full">
-            <label
-              htmlFor="Result"
-              className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
-            >
-              Result
-            </label>
-            <div className="mt-1">
-              <ShortTextSelector
-                control={control}
-                label="Results"
-                list={resultList}
-              />
-            </div>
-          </div>
-          <div className="w-full">
-            <label
-              htmlFor="Page"
-              className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
-            >
-              Page
-            </label>
-            <div className="mt-1">
-              <input
-                {...register('Page', { valueAsNumber: true })}
-                min="1"
-                id="Page"
-                name="Page"
-                type="number"
+                {...register('URL')}
+                id="URL"
+                name="URL"
+                type="text"
+                placeholder="Paste a URL to scrape"
                 required
-                className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-zinc-100 px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
+                className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-zinc-100 px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-base placeholder:font-normal placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
               />
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="flex w-full flex-col gap-y-[23px]">
+            <div>
+              <label
+                htmlFor="Query"
+                className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
+              >
+                Query
+              </label>
+              <div className="mt-1">
+                <input
+                  {...register('Query')}
+                  id="Query"
+                  name="Query"
+                  type="text"
+                  required
+                  className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-zinc-100 px-3 py-[calc(theme(spacing.2)-1px)] text-left text-base font-normal shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
+                />
+              </div>
+            </div>
 
-        <div>
-          <label
-            htmlFor="MiniBatch"
-            className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
-          >
-            Mini-batch (up to 100 queries)
-          </label>
-          <div className="mt-1">
-            <Controller
-              name="MiniBatch"
-              control={control}
-              render={({ field }) => (
-                <MySwitch enabled={field.value} setEnabled={field.onChange} />
+            {tempFilterprop.Type.name === 'Maps' ? (
+              <div>
+                <label
+                  htmlFor="GPSPosition"
+                  className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
+                >
+                  GPS position & zoom level
+                </label>
+                <div className="mt-1">
+                  <input
+                    {...register('GPSPosition')}
+                    id="GPSPosition"
+                    name="GPSPosition"
+                    type="text"
+                    placeholder="@latitude, longtitude, zoom"
+                    required
+                    className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-zinc-100 px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-base placeholder:font-normal placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
+                  />
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+            {tempFilterprop.Type.name === 'Maps' ? (
+              <div>
+                <label
+                  htmlFor="PlaceID"
+                  className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
+                >
+                  Place ID
+                </label>
+                <div className="mt-1">
+                  <input
+                    {...register('PlaceID')}
+                    id="PlaceID"
+                    name="PlaceID"
+                    type="text"
+                    placeholder="Optional"
+                    required
+                    className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-zinc-100 px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-base placeholder:font-normal placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
+                  />
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+
+            {tempFilterprop.Type.name === 'Maps' ? (
+              <div>
+                <label
+                  htmlFor="CID"
+                  className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
+                >
+                  CID
+                </label>
+                <div className="mt-1">
+                  <input
+                    {...register('CID')}
+                    id="CID"
+                    name="CID"
+                    type="text"
+                    placeholder="Optional"
+                    required
+                    className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-zinc-100 px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-base placeholder:font-normal placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
+                  />
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+
+            {tempFilterprop.Type.name === 'Patents' ||
+            tempFilterprop.Type.name === 'Maps' ? (
+              <></>
+            ) : (
+              <div>
+                <label
+                  htmlFor="Country"
+                  className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
+                >
+                  Country
+                </label>
+                <div className="mt-1">
+                  <LongTextSelector
+                    control={control}
+                    label="Country"
+                    list={countryList}
+                  />
+                </div>
+              </div>
+            )}
+            {tempFilterprop.Type.name === 'Patents' ||
+            tempFilterprop.Type.name === 'Maps' ? (
+              <></>
+            ) : (
+              <div>
+                <label
+                  htmlFor="Location"
+                  className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
+                >
+                  Location
+                </label>
+                <div className="mt-1">
+                  <LongTextSelector
+                    control={control}
+                    label="Location"
+                    list={locationList}
+                  />
+                </div>
+              </div>
+            )}
+
+            {tempFilterprop.Type.name === 'Patents' ? (
+              <></>
+            ) : (
+              <div>
+                <label
+                  htmlFor="Language"
+                  className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
+                >
+                  Language
+                </label>
+                <div className="mt-1">
+                  <LongTextSelector
+                    control={control}
+                    label="Language"
+                    list={languageList}
+                  />
+                </div>
+              </div>
+            )}
+
+            {tempFilterprop.Type.name === 'Maps' ||
+            tempFilterprop.Type.name === 'Patents' ? (
+              <></>
+            ) : (
+              <div className="flex w-full flex-row items-center gap-x-4">
+                {tempFilterprop.Type.name === 'Places' ||
+                tempFilterprop.Type.name === 'Shopping' ||
+                tempFilterprop.Type.name === 'Scholar' ||
+                tempFilterprop.Type.name === 'Autocomplete' ? (
+                  <></>
+                ) : (
+                  <div className="w-full">
+                    <label
+                      htmlFor="DateRange"
+                      className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
+                    >
+                      Date range
+                    </label>
+                    <div className="mt-1">
+                      <ShortTextSelector
+                        control={control}
+                        label="DateRange"
+                        list={dateRangeList}
+                      />
+                    </div>
+                  </div>
+                )}
+                <div className="w-full">
+                  <label
+                    htmlFor="Autocorrect"
+                    className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
+                  >
+                    Autocorrect
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      {...register('Autocorrect')}
+                      id="Autocorrect"
+                      name="Autocorrect"
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-zinc-700 text-zinc-800 accent-zinc-800 focus:ring-zinc-800 dark:text-zinc-100 dark:accent-zinc-100 dark:focus:ring-zinc-100"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="flex w-full flex-row items-center gap-x-4">
+              {tempFilterprop.Type.name === 'Maps' ||
+              tempFilterprop.Type.name === 'Places' ||
+              tempFilterprop.Type.name === 'Scholar' ||
+              tempFilterprop.Type.name === 'Autocomplete' ? (
+                <></>
+              ) : (
+                <div className="w-full">
+                  <label
+                    htmlFor="Result"
+                    className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
+                  >
+                    Result
+                  </label>
+                  <div className="mt-1">
+                    <ShortTextSelector
+                      control={control}
+                      label="Results"
+                      list={resultList}
+                    />
+                  </div>
+                </div>
               )}
-            />
+
+              <div className="w-full">
+                <label
+                  htmlFor="Page"
+                  className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
+                >
+                  Page
+                </label>
+                <div className="mt-1">
+                  <input
+                    {...register('Page', { valueAsNumber: true })}
+                    min="1"
+                    id="Page"
+                    name="Page"
+                    type="number"
+                    required
+                    className="w-full min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-zinc-100 px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 sm:text-sm dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="MiniBatch"
+                className="block text-sm font-medium leading-6  text-zinc-800 dark:text-zinc-100"
+              >
+                Mini-batch (up to 100 queries)
+              </label>
+              <div className="mt-1">
+                <Controller
+                  name="MiniBatch"
+                  control={control}
+                  render={({ field }) => (
+                    <MySwitch
+                      enabled={field.value}
+                      setEnabled={field.onChange}
+                    />
+                  )}
+                />
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </form>
     </div>
   )

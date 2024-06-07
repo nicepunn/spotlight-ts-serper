@@ -20,6 +20,10 @@ export const defaultFilterProps: FormFilterProps = {
   MiniBatch: false,
   CodingLanguage: 'cURL',
   Method: 'cURL',
+  CID: '',
+  GPSPosition: '',
+  PlaceID: '',
+  URL: '',
 }
 
 interface FilterState {
