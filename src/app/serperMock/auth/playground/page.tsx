@@ -152,7 +152,7 @@ function InputCard(props: {
           {tempFilterprop.Type.name !== 'Webpage' ? (
             <></>
           ) : (
-            <div className="mt-4 flex w-full flex-row gap-x-3 rounded-lg bg-zinc-300 p-3 dark:bg-zinc-700">
+            <div className="mt-4 flex w-full flex-row gap-x-3 rounded-lg bg-zinc-200 p-3 dark:bg-zinc-700">
               <div className="flex flex-col justify-center">
                 <InformationCircleIcon className="h-6 w-6" area-hidden="true" />
               </div>
