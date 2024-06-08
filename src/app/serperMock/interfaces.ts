@@ -169,3 +169,23 @@ export const FilterPropsSchema = z.object({
 })
 
 export type FormFilterProps = z.infer<typeof FilterPropsSchema>
+
+export interface LanguageState {
+  cSharp: string
+  dart: string
+  go: string
+  http: string
+  java: string
+  javaScript: string
+  c: string
+  nodeJs: string
+  objectiveC: string
+  ocaml: string
+  php: string
+  powerShell: string
+  python: string
+  r: string
+  ruby: string
+  shell: string
+  swift: string
+}

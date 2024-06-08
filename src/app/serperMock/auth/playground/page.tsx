@@ -33,6 +33,7 @@ import {
   DateRange,
   FilterPropsSchema,
   FormFilterProps,
+  LanguageState,
   ListItem,
   Result,
   TypeItem,
@@ -462,26 +463,7 @@ function InputCard(props: {
 }
 
 import { useRef } from 'react'
-
-interface LanguageState {
-  cSharp: string
-  dart: string
-  go: string
-  http: string
-  java: string
-  javaScript: string
-  c: string
-  nodeJs: string
-  objectiveC: string
-  ocaml: string
-  php: string
-  powerShell: string
-  python: string
-  r: string
-  ruby: string
-  shell: string
-  swift: string
-}
+import { toOtherLang } from '../libs/MyOtherLangConverter'
 
 const initialLanguageState: LanguageState = {
   cSharp: 'C#',
@@ -633,6 +615,10 @@ function OutputCard(props: {
     }
   }
 
+  useEffect(() => {
+    setOtherLang(toOtherLang(curl))
+  }, [curl])
+
   return (
     <nav className="mt-1 flex w-full flex-col overflow-auto bg-inherit">
       <div className="relative flex h-10 justify-between">
@@ -703,12 +689,21 @@ function OutputCard(props: {
               variant="secondary"
               className="box-border h-full items-center gap-x-2 border border-zinc-100 px-4 dark:border-zinc-900"
               onClick={() => {
-                navigator.clipboard.writeText(curl).then(() => {
-                  setCopyState('Copied')
-                  setTimeout(() => {
-                    setCopyState('Copy')
-                  }, 2000)
-                })
+                navigator.clipboard
+                  .writeText(
+                    tempFilterProp.CodingLanguage === 'cURL'
+                      ? curl
+                      : getLanguageValue(
+                          tempFilterProp.CodingLanguage,
+                          otherLang,
+                        ),
+                  )
+                  .then(() => {
+                    setCopyState('Copied')
+                    setTimeout(() => {
+                      setCopyState('Copy')
+                    }, 2000)
+                  })
               }}
             >
               {copyState}
