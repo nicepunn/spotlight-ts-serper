@@ -700,7 +700,7 @@ function OutputCard(props: {
         <div className="mt-4 flex min-h-48 w-full flex-col gap-y-4 overflow-auto rounded-lg bg-zinc-100 p-4 md:p-6 dark:bg-zinc-900">
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex h-10 w-full flex-row-reverse gap-x-2 overflow-x-auto"
+            className="flex h-10 w-full flex-row-reverse gap-x-2"
           >
             <Button
               type="button"
