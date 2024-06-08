@@ -82,7 +82,7 @@ export default function Playground() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setTempFilterProp(formValues)
-    }, 10)
+    }, 20)
     return () => clearTimeout(timer)
   }, [watch, formValues])
 
