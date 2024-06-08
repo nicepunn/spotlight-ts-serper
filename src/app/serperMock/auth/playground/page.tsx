@@ -62,6 +62,7 @@ export default function Playground() {
   // }, [tempFilterProp])
 
   const {
+    setValue,
     register,
     handleSubmit,
     control,
@@ -122,6 +123,7 @@ export default function Playground() {
           control={control}
           handleSubmit={handleSubmit}
           onSubmit={onSubmit}
+          setValue={setValue}
         />
       </div>
     </div>
@@ -496,8 +498,16 @@ function OutputCard(props: {
   onSubmit: any
   handleSubmit: any
   control: any
+  setValue: any
 }) {
-  const { filterProp, tempFilterProp, handleSubmit, onSubmit, control } = props
+  const {
+    filterProp,
+    tempFilterProp,
+    handleSubmit,
+    onSubmit,
+    control,
+    setValue,
+  } = props
   const apiKey = useApiKeyStore((state) => state.apiKey)
   const [modeSelected, setModeSelect] = useState<'Results' | 'Code'>('Code')
   const resultJsonData = useResultStore((state) => state.result)
@@ -529,6 +539,10 @@ function OutputCard(props: {
       ;('')
     }
   }
+
+  useEffect(() => {
+    setValue('Method', getMethodList(tempFilterProp.CodingLanguage)[0].name)
+  }, [tempFilterProp.CodingLanguage])
 
   const useIsMount = () => {
     const isMountRef = useRef(true)
