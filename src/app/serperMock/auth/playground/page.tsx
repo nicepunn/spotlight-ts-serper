@@ -56,6 +56,11 @@ export default function Playground() {
   const defaultValues: FormFilterProps = useMemo(() => filterProp, [filterProp])
   const [tempFilterProp, setTempFilterProp] =
     useState<FormFilterProps>(defaultValues)
+
+  // useEffect(() => {
+  //   console.log(tempFilterProp)
+  // }, [tempFilterProp])
+
   const {
     register,
     handleSubmit,
@@ -616,8 +621,8 @@ function OutputCard(props: {
   }
 
   useEffect(() => {
-    setOtherLang(toOtherLang(curl))
-  }, [curl])
+    setOtherLang(toOtherLang(curl, tempFilterProp.Method))
+  }, [curl, tempFilterProp])
 
   return (
     <nav className="mt-1 flex w-full flex-col overflow-auto bg-inherit">
@@ -712,7 +717,7 @@ function OutputCard(props: {
               <ShortTextSelector
                 control={control}
                 label="Method"
-                list={methodList}
+                list={getMethodList(tempFilterProp.CodingLanguage)}
               />
             </div>
             <div className="h-full w-full sm:w-fit sm:min-w-40 lg:w-full lg:min-w-0 lg:max-w-40">
@@ -973,6 +978,8 @@ function ShortTextSelector(props: {
   control: any
 }) {
   const { label, list, control } = props
+
+  useEffect(() => {}, [list])
 
   return (
     <Controller
@@ -1381,4 +1388,69 @@ const codingLanguageList: CodingLanguage[] = [
   { id: 18, name: 'Swift', aka: 'Swift' },
 ]
 
-const methodList: ListItem[] = [{ id: 1, name: 'cURL', aka: 'cURL' }]
+const getMethodList = (codingLanguage: string): ListItem[] => {
+  switch (codingLanguage) {
+    case 'C':
+      return [{ id: 1, name: 'libcurl', aka: 'libcurl' }]
+    case 'C#':
+      return [{ id: 1, name: 'RestSharp', aka: 'RestSharp' }]
+    case 'Dart':
+      return [{ id: 1, name: 'http', aka: 'http' }]
+    case 'Go':
+      return [{ id: 1, name: 'Native', aka: 'Native' }]
+    case 'HTTP':
+      return [{ id: 1, name: 'HTTP', aka: 'HTTP' }]
+    case 'Java':
+      return [
+        { id: 1, name: 'OkHttp', aka: 'OkHttp' },
+        { id: 2, name: 'Unirest', aka: 'Unirest' },
+      ]
+    case 'JavaScript':
+      return [
+        { id: 1, name: 'Fetch', aka: 'Fetch' },
+        { id: 2, name: 'jQuery', aka: 'jQuery' },
+        { id: 3, name: 'XHR', aka: 'XHR' },
+      ]
+    case 'NodeJs':
+      return [
+        { id: 1, name: 'Axios', aka: 'Axios' },
+        { id: 2, name: 'Native', aka: 'Native' },
+        { id: 3, name: 'Request', aka: 'Request' },
+        { id: 4, name: 'Unirest', aka: 'Unirest' },
+      ]
+    case 'Objective-C':
+      return [{ id: 1, name: 'NSURLSession', aka: 'NSURLSession' }]
+    case 'OCaml':
+      return [{ id: 1, name: 'Cohttp', aka: 'Cohttp' }]
+    case 'PHP':
+      return [
+        { id: 1, name: 'cURL', aka: 'cURL' },
+        { id: 2, name: 'Guzzle', aka: 'Guzzle' },
+        { id: 3, name: 'HTTP_Request2', aka: 'HTTP_Request2' },
+        { id: 4, name: 'pecl_http', aka: 'pecl_http' },
+      ]
+    case 'PowerShell':
+      return [{ id: 1, name: 'RestMethod', aka: 'RestMethod' }]
+    case 'Python':
+      return [
+        { id: 1, name: 'http.client', aka: 'http.client' },
+        { id: 2, name: 'Requests', aka: 'Requests' },
+      ]
+    case 'R':
+      return [
+        { id: 1, name: 'httr', aka: 'httr' },
+        { id: 2, name: 'RCurl', aka: 'RCurl' },
+      ]
+    case 'Ruby':
+      return [{ id: 1, name: 'Net::HTTP', aka: 'Net::HTTP' }]
+    case 'Shell':
+      return [
+        { id: 1, name: 'Httpie', aka: 'Httpie' },
+        { id: 2, name: 'wget', aka: 'wget' },
+      ]
+    case 'Swift':
+      return [{ id: 1, name: 'URLSession', aka: 'URLSession' }]
+    default:
+      return [{ id: 1, name: 'cURL', aka: 'cURL' }]
+  }
+}
